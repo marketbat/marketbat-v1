@@ -181,7 +181,7 @@ i {
 }
 .banner__assets-items {
     display: flex;
-    animation: scrollBanner 20000s linear infinite;
+    animation: scrollBanner 200000s linear infinite;
 }
 
 .banner__assets-item{

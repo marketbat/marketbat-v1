@@ -11,7 +11,55 @@ import requests
 from django.db.models import Max
 from django.db import IntegrityError
 from django.db.models import Count
+import csv
 
+def create_assets_from_csv():
+    try:
+        csv_file = 'bat_app/data/forex.csv'
+        
+        with open(csv_file, 'r', encoding='utf-8-sig') as file:
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                try:
+                    # Remove the BOM from the column name
+                    code = row.get('\ufeff"CODE"', row.get('CODE'))
+                    
+                    base_currency = row["BASE_CURRENCY"]
+                    quote_currency = row["QUOTE_CURRENCY"]
+                    name = f"{base_currency}_{quote_currency}"
+
+                    # Check if the asset with the same name already exists
+                    if not Assets.objects.filter(name=name).exists():
+                        Assets.objects.create(name=name, symbol=code, category="Forex")
+                        print("Added", name)
+                except Exception as e:
+                    print("Error processing row:", e)
+    except Exception as ex:
+        print("Error opening CSV file:", ex)
+
+def create_assets_from_csv_stocks():
+    try:
+        csv_file = 'bat_app/data/stocks.csv'
+        
+        with open(csv_file, 'r', encoding='utf-8-sig') as file:
+            csv_reader = csv.DictReader(file)
+            
+            for row in csv_reader:
+                try:
+                    # Remove the BOM from the column name
+            
+                    symbol = row["Symbol"]
+                    name= row["Name"]
+                    
+
+                    # Check if the asset with the same name already exists
+                    if not Assets.objects.filter(name=name).exists():
+                        Assets.objects.create(name=name, symbol=symbol, category="Stocks")
+                        print("Added", name)
+                except Exception as e:
+                    print("Error processing row:", e)
+    except Exception as ex:
+        print("Error opening CSV file:", ex)
 
 def error_404(request, exception):
     return render(request, '404.html', status=404)
@@ -399,6 +447,8 @@ def community(request):
 
 @csrf_exempt
 def home(request):
+    create_assets_from_csv()
+    create_assets_from_csv_stocks()
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
     else:
