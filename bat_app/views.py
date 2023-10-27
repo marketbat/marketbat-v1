@@ -50,11 +50,12 @@ def create_assets_from_csv_stocks():
             
                     symbol = row["Symbol"]
                     name= row["Name"]
+                    price = row['Last Sale']
                     
 
                     # Check if the asset with the same name already exists
                     if not Assets.objects.filter(name=name).exists():
-                        Assets.objects.create(name=name, symbol=symbol, category="Stocks")
+                        Assets.objects.create(name=name, symbol=symbol, category="Stocks", market_price=price)
                         print("Added", name)
                 except Exception as e:
                     print("Error processing row:", e)
