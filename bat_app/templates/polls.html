@@ -1,0 +1,214 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="polls__container">
+    <div class="polls__header">
+        <h3>Daily Sentiment Polls</h3>
+        <!-- <select id="pollsDuration" onchange="">
+            <option value="10">Last hour</option>
+            <option value="15">Last 24 hours</option>
+            <option value="20">Last week</option>
+            <option value="25">Last month</option>
+           
+        </select> -->
+     </div>
+     <div class="polls__search search-item">
+        <input data-authenticated="true" type="search" id="pollsSearch" placeholder="Search polls">
+    </div>
+
+    
+    
+   
+    <div class="polls__body">
+        <h3>Top Polls</h3>
+        {% for asset in top_polls %}
+        <div class="polls__body-item" data-asset-id="{{ asset.id }}" >
+            <span class="polls__title">
+                <p>{{ asset.name }}</p>
+                <p id="total-polls-{{ asset.id }}">{{ asset.total_polls }}</p>
+            </span>
+            <button data-authenticated="true" class="polls__body-item-bullish {% if profile in asset.profiles_voted_bullish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bullish">
+                <p>🐂 Bullish<i class='bx bxs-check-circle'></i></p>
+                <h3 id="percent-bullish-{{ asset.id }}">{{ asset.percent_bullish }}%</h3>
+            </button>        
+            <button data-authenticated="true" class="polls__body-item-bearish {% if profile in asset.profiles_voted_bearish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bearish">
+                <p>🐻 Bearish<i class='bx bxs-check-circle'></i></p>
+                <h3 id="percent-bearish-{{ asset.id }}">{{ asset.percent_bearish }}%</h3>
+            </button>
+        </div>
+    {% endfor %}
+    
+
+
+    
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    const searchInput = document.getElementById('pollsSearch');
+    const resultsContainer = document.querySelector('.polls__body');
+    
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+    
+        $.ajax({
+            url: 'search_polls_assets',  // Replace with the correct URL
+            method: 'GET',
+            data: { search_term: searchTerm },
+            success: function (data) {
+                resultsContainer.innerHTML = '';  // Clear previous results
+                
+                if (data.assets.length > 0) {
+                    data.assets.forEach(asset => {
+                        const assetItem = document.createElement('div');
+                        assetItem.classList.add('polls__body-item');
+                        assetItem.id = `asset-${asset.id}`;
+    
+                        console.log(asset.id)
+                        
+                        // Provide default values if percent_bullish or percent_bearish are undefined
+                        const percentBullish = asset.percent_bullish !== undefined ? asset.percent_bullish.toFixed(2) : '0.00';
+                        const percentBearish = asset.percent_bearish !== undefined ? asset.percent_bearish.toFixed(2) : '0.00';
+                        
+                        assetItem.innerHTML = `
+                            <span class="polls__title">
+                                <p>${asset.name}</p>
+                                <p id="total-polls-${asset.id}">${asset.total_polls}</p>
+                            </span>
+                            <button class="polls__body-item-bullish ${asset.isBullish ? 'active' : ''}" data-asset-id="${asset.id}" data-poll-type="bullish">
+                                <p>🐂 Bullish<i class='bx bxs-check-circle'></i></p>
+                                <h3 id="percent-bullish-${asset.id}">${percentBullish}%</h3>
+                            </button>        
+                            <button class="polls__body-item-bearish ${asset.isBearish ? 'active' : ''}" data-asset-id="${asset.id}" data-poll-type="bearish">
+                                <p>🐻 Bearish<i class='bx bxs-check-circle'></i></p>
+                                <h3 id="percent-bearish-${asset.id}">${percentBearish}%</h3>
+                            </button>
+                        `;
+                        resultsContainer.appendChild(assetItem);
+                            // Get all the buttons with class 'polls__body-item-bullish' and 'polls__body-item-bearish'
+                            const pollContainer = document.querySelectorAll('.polls__body-item');
+
+                            // Add click event listeners to the bullish buttons
+                            pollContainer.forEach(container => {
+                                const bullishButton = container.querySelector('.polls__body-item-bullish');
+                                const bearishButton = container.querySelector('.polls__body-item-bearish');
+                                bullishButton.addEventListener('click', () => {
+                                    if (!bullishButton.classList.contains('active')) {
+                                        // Add 'active' to the clicked bullish button
+                                        bullishButton.classList.add('active');
+                                        bearishButton.classList.remove('active');
+                                        // Update the poll on the server and switch to bullish
+                                        updatePoll('bullish', bullishButton.dataset.assetId);
+                                    }
+                                });
+
+                                bearishButton.addEventListener('click', () => {
+                                    if (!bearishButton.classList.contains('active')) {
+                                        // Add 'active' to the clicked bullish button
+                                        bearishButton.classList.add('active');
+                                        bullishButton.classList.remove('active');
+                                        // Update the poll on the server and switch to bullish
+                                        updatePoll('bearish', bearishButton.dataset.assetId);
+                                    }
+                                });
+                            });
+                    });
+
+                } else {
+                    resultsContainer.innerHTML = '<p class="no-polls-results">No asset polls found</p>';
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('Error:', status, error);
+            }
+        });
+    });
+    
+    
+    </script>
+
+<script>
+    // Get all the buttons with class 'polls__body-item-bullish' and 'polls__body-item-bearish'
+
+const pollContainer = document.querySelectorAll('.polls__body-item');
+
+// Add click event listeners to the bullish buttons
+pollContainer.forEach(container => {
+    const bullishButton = container.querySelector('.polls__body-item-bullish');
+    const bearishButton = container.querySelector('.polls__body-item-bearish');
+    bullishButton.addEventListener('click', () => {
+        if (!bullishButton.classList.contains('active')) {
+            // Add 'active' to the clicked bullish button
+            bullishButton.classList.add('active');
+            bearishButton.classList.remove('active');
+            // Update the poll on the server and switch to bullish
+            updatePoll('bullish', container.dataset.assetId);
+        }
+    });
+
+    bearishButton.addEventListener('click', () => {
+        if (!bearishButton.classList.contains('active')) {
+            // Add 'active' to the clicked bullish button
+            bearishButton.classList.add('active');
+            bullishButton.classList.remove('active');
+            // Update the poll on the server and switch to bullish
+            updatePoll('bearish', container.dataset.assetId);
+        }
+    });
+});
+
+
+
+// Function to update the poll on the server
+function updatePoll(pollType, assetId) {
+    $.ajax({
+        url: `/update_poll/${assetId}/${pollType}`,
+        method: 'POST',
+        data: {},
+        success: function (response) {
+            if (response.message === 'success') {
+                // Update the displayed poll percentages and total polls for the specific asset
+                const totalPollsElement = document.getElementById(`total-polls-${assetId}`);
+                const percentBullishElement = document.getElementById(`percent-bullish-${assetId}`);
+                const percentBearishElement = document.getElementById(`percent-bearish-${assetId}`);
+
+                if (totalPollsElement && percentBullishElement && percentBearishElement) {
+                    totalPollsElement.textContent = response.total_polls;
+                    percentBullishElement.textContent = response.percent_bullish.toFixed(2) + '%';
+                    percentBearishElement.textContent = response.percent_bearish.toFixed(2) + '%';
+                }
+            } else if (response.message === 'not_authenticated') {
+                // Handle not authenticated
+            } else {
+                console.log('Unexpected response:', response);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log('Error:', status, error);
+        }
+    });
+}
+
+
+</script>
+
+
+
+
+
+
+{% endblock %}
+
+{% block polls-sidebar %}
+active
+{% endblock %}
+
+{% for conversation in conversations %}
+    {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+        {% block unread_messages %}unread_message-notifier-tab{% endblock %}
+        {% block unread_messages-tab %}unread{% endblock %}
+    {% endif %}
+{% endfor %}

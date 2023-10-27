@@ -1,0 +1,422 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="profile__container">
+   <div class="profile__container-header">
+      <h1>My Profile</h1>
+   </div>
+   <div class="profile__container-body">
+    <div class="profile__header">
+       
+           {% csrf_token %}
+        <div class="profile__header-banner">
+            {% if user_profile.cover_picture %}
+            <img  id="cover-preview" src="{{ user_profile.cover_picture.url }}" alt="">
+            {% else %}
+            <img  id="cover-preview" src="{% static 'images/cover.jpeg' %}" alt="">
+            {% endif %}
+       
+          <div class="edit-icon profile-cover-photo-edit" data-field="cover">
+                <label for="cover-input" class="edit-label"></label>
+                <input type="file" id="cover-input" accept="image/*"  name="cover">
+            </div>
+        </div>
+        <div class="profile__header-sub-banner">
+           <div class="profile__photo">
+              <div class="profile__header-dp">
+                 {% if user_profile.profile_picture %}
+                 <img id="avatar-preview" src="{{ user_profile.profile_picture.url }}" alt="">
+                 {% else %}
+                 <img  id="avatar-preview" src="{% static 'images/user.png' %}" alt="">
+                 {% endif %}
+                 <div class="edit-icon profile-photo-edit" data-field="dp">
+                    <label for="dp-input" class="edit-label"></i></label>
+                    <input type="file" id="dp-input" accept="image/*"  name="avatar">
+                </div>
+             </div>
+           </div>
+            
+    
+            <div class="profile__header-names">
+                <div class="profile__header-display-name">
+                    <h3>{{ user_profile.display_name }} 
+                       {% if user_profile.verification_status == "Verified"%}
+                          <i class=' verified bx bxs-badge-check '></i>
+                          <div class="pending-id-container">
+                             <p>Your Identity is verified.</p>
+                          </div>
+                          {% elif user_profile.verification_status == "Pending"%}
+                          <i class='bx bxs-error-circle pending'></i>
+                          <div class="pending-id-container">
+                             <p>Your Identity Verification is ongoing. </p>
+                          </div>
+                          {% elif user_profile.verification_status == "NotVerified" %}  
+                          <i class='bx bxs-error not-verified' ></i>
+                          <div class="pending-id-container">
+                             <p>You have not verified your identity, please click <a href="#id-verification">here</a> to begin verification.  </p>
+                          </div>
+                       {%  endif %}
+                    </h3>
+                </div>
+                <div class="profile__header-username">
+                    <p>@{{ user_profile.username }}</p>
+                </div>
+                <div class="profile__header-names-footer">
+                    <div class="profile__header-following-followers">
+                        <div class="profile__header-following">
+                            <span id="following__count">
+                                {{ user_profile.following.count }}
+                            </span>
+                            following.
+                        </div>
+                        <div class="profile__header-followers">
+                            <span id="followers__count"> 
+                                {{ user_profile.followers.count }}
+                            </span>
+                            followers.
+                        </div>
+                    </div>
+                    <button id="follow-btn" data-authenticated="true" class="profiles__follow-btn follow" data-profile-id="{{ user_profile.id }}">
+                        {% if profile in user_profile.followers.all %}
+                            <p>Following</p>
+                        {% else %}
+                            <p>Follow</p>
+                        {% endif %}
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="profile__header-about">
+            <div class="profile__header-about-text">
+              {% if user_profile.bio %}
+                <p id="bio-text">{{ user_profile.bio }}</p>
+              {% else %}
+              <p id="bio-text">Enter Profile Bio</p>
+              {% endif %}
+                <div class="edit-icon" data-field="bio"><i class='bx bxs-edit'></i></div>
+            </div>
+            <div class="profile__header-about-footer">
+                <div class="profile__header-about-link">
+                    <i class='bx bx-like'></i>
+                    {% if user_profile.interests %}
+                    <p id="interests">{{ user_profile.interests }}</p>
+                    {% else %}
+                    <p id="interests" aria-placeholder="Add your interests"></p>
+                    {% endif %}
+                    <div class="edit-icon" data-field="location"><i class='bx bxs-edit'></i></div>
+                </div>
+                <div class="profile__header-about-joined">
+                    <p>Joined</p>
+                    <p class="" >{{ user_profile.joined.date  }}</p>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+      <div class="profile__body">
+         <div class="profile__body-header">
+            <h2>My Activities</h2>
+         </div>
+         <div class="community-posts-container">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="community-posts-item" id="post-{{post.id}}">
+                    <div class="profile__activity">
+                        <i class='bx bx-shape-circle' ></i>
+                        <p>You posted</p>
+                     </div>
+                    <div class="community-posts-item_header">
+                        <div class="community-posts-item_header-left">
+                            
+                            <span class="community-post-avatar">
+                                <a href="{% url 'user_profile' post.profile.username %}">
+                                    {% if post.profile.profile_picture %}
+                                        <img src="{{ post.profile.profile_picture.url }}" alt="">
+                                    {% else %}
+                                        <img src="{% static 'images/user.png'%}" alt="">
+                                    {% endif %}
+                                </a>
+                            </span>
+                            <span class="community-post-name">
+                                <a href="{% url 'user_profile' post.profile.username %}">
+                                    <span class="community-post-name_symbol">
+                                        {{post.profile.display_name}}
+                                    </span>
+                                </a>
+                                <span class="community-post-badge"><i class='bx bxs-badge-check'></i></span>
+                                <span class="community-post-symbol">@{{post.profile.user}}</span>
+                                <span class="community-post-symbol">·</span>
+                                <span class="community-post-time time" data-post-timestamp="{{ post.post_date | date:'U' }}">{{ post.post_date }}</span>
+                            </span>
+                        </div>
+                        <!-- <div class="community-posts-item_header-right">
+                            <button class="community-post-sentiment  {% if post.post_sentiment == 'Bullish' %}positive-bg{% else %}negative-bg{% endif %}">{{post.post_sentiment}}</button>
+                        </div> -->
+                    </div>
+                    <div class="community-posts-item_body">
+                        <p> 
+                            {{post.post_text}}
+                        </p>
+                      
+                        <span class="post_image">
+                            {% if post.post_image %}
+                                <img src="{{ post.post_image.url }}" alt="">
+                            {% endif %}
+                        </span> 
+                        <span class="post__video">
+                            {% if post.post_video %}
+                            <div class="video-container">
+                                <video id="post-video" src="{{ post.post_video.url }}" controls></video>
+                               
+                            </div>
+                            
+                            {% endif %}
+                        </span> 
+                    </div>
+                    <div class="community__posts-item_footer">
+                        {% if profile in post.likes.all %}
+                        <span>
+                            <i  data-post-id="{{ post.id }}" class='bx bxs-heart like' ></i>
+                            <p id="post-like-{{ post.id }}">{{post.likes.count}}</p>
+                        </span>
+                       
+                        {% else %}
+                        <span>
+                            <i  data-post-id="{{ post.id }}" class='bx bx-heart like' ></i>
+                            <p id="post-like-{{ post.id }}">{{post.likes.count}}</p>
+                        </span>
+                       
+                        {% endif %}
+                        <span>
+                            <i class='bx bx-comment-detail'></i>
+                            <p>{{ post.comments.count }}</p>
+                        </span>
+                      
+                    </div>
+                    <div class="community__posts-item_comment">
+                        <input class="post-comment-text" data-post-id="{{ post.id }}" type="text" placeholder="Comment..">
+                        <button class="post-comment-btn" data-post-id="{{ post.id }}"><i class='bx bxs-send'></i></button>
+                   </div>
+                   <div class="community__posts-item_comment-box">
+                    {% if post.comments.all %}
+                        {% for comment in post.comments.all reversed%}
+                        <div class="community__posts-item_header-left comment__head" id="{{comment.id}}">
+                            
+                                {% if comment.comment_author.profile_picture  %}
+                                <span class="community__post-avatar">
+                                    <a href="{% url 'user_profile' comment.comment_author.username %}">
+                                        <img src="{{ comment.comment_author.profile_picture.url }}" alt="">
+                                    </a>
+                                </span>
+                                {% else %}
+                                <span class="community__post-avatar">
+                                    <a href="{% url 'user_profile' comment.comment_author.username %}">
+                                         <img src="{% static 'images/user.png'%}" alt="">
+                                    </a>
+                                </span>
+                                {% endif %}
+                         
+                            <div class="">
+                                <span class="community__post-name">
+                                    <span class="community__post-display-name">
+                                        <a href="{% url 'user_profile' comment.comment_author.username %}">
+                                            {{comment.comment_author.display_name}}
+                                        </a>
+                                    </span>
+                                    <span class="community__post-badge"><i class='bx bxs-badge-check'></i></span>
+                                    <span class="community__post-username">@{{comment.comment_author.user}}</span>
+                                    <span class="community__post-symbol">·</span>
+                                    <span class="community__post-time time" data-post-timestamp="{{ comment.comment_date | date:'U' }}">{{ comment.comment_date }} ago</span>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="post__comment-text">
+                            <p> 
+                                {{comment.comment_text}}
+                            </p>
+                        </span>
+                        {%  endfor %}
+                    {% else %}
+                    <div class="post__no-comments">
+                        <span>No comments yet.</span>
+                    </div>
+                    {% endif %}
+                </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="community-no-posts">
+                <h1>No Posts Yet. </h1>
+            </div>
+            {% endif %}
+        </div>
+      </div>
+   </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+  
+  <script>
+    const viewCommentButtons = document.querySelectorAll('.bx-comment-detail');
+  
+    viewCommentButtons.forEach(function (viewCommentButton) {
+        viewCommentButton.addEventListener("click", function () {
+            // Find the common ancestor element
+            const commonAncestor = this.closest('.community__posts-item_footer');
+            
+            if (commonAncestor) {
+                // Find the corresponding comment container
+                const commentContainer = commonAncestor.nextElementSibling.nextElementSibling;
+  
+                // Toggle the comment container's visibility
+                if (commentContainer) {
+                    if (commentContainer.style.display === 'none' || commentContainer.style.display === '') {
+                        commentContainer.style.display = 'block';
+                    } else {
+                        commentContainer.style.display = 'none';
+                    }
+                }
+            }
+        });
+    });
+  </script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const commentBtns = document.querySelectorAll('.post-comment-btn');
+    
+        commentBtns.forEach(function (commentBtn) {
+            commentBtn.addEventListener("click", function () {
+                const commentText = this.previousElementSibling; // Get the input element before the button
+                const commentTextValue = commentText.value;
+                const postId = this.dataset.postId; // Get the postId from the button's data attribute
+    
+                // Store the current scroll position in localStorage
+                
+    
+                const formData = new FormData();
+                formData.append('text', commentTextValue);
+                $.ajax({
+                    url: '/comment/' + postId + '/',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // Reload the page
+                        window.location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 400) {
+                            console.log('Comment unsuccessful');
+                        } else {
+                            console.log('Error:', status, error);
+                        }
+                    }
+                });
+            });
+        });
+                      
+        window.onload = function () {
+          // Restore the scroll position after the page has loaded
+          const scrollPosition = localStorage.getItem('scrollPosition');
+          if (scrollPosition) {
+              window.scrollTo(0, scrollPosition);
+              localStorage.removeItem('scrollPosition'); // Remove the stored scroll position
+          }
+        }
+    });
+    </script>
+    
+  
+  <script>
+    // Add a click event listener to the heart icons
+    $(document).on('click', 'i.like, i.like', function () {
+        // Get the campaign ID from the data attribute
+        var postId = $(this).data('post-id');
+        
+        // Toggle the heart icon's class
+        $(this).toggleClass('bx-heart bxs-heart');
+  
+        // Store a reference to the current 'this' for use inside the AJAX success function
+        var currentElement = this;
+  
+        // Send an AJAX request to your Django view
+        $.ajax({
+            url: '/like_post/' + postId + '/', // Replace with your Django view URL
+            type: 'POST', // You can also use 'GET' depending on your view
+            data: {
+                'campaign_id': postId,
+                'action': 'like_or_unlike', // You can define your own action parameter
+            },
+            success: function (data) {
+                // Handle the response if needed
+                console.log('like/unlike');
+                const likeBtn = document.getElementById(`post-like-${postId}`);
+                console.log(data.message);
+                
+                // Update the content of the current element with the received message
+                $(likeBtn).html(data.message);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Handle errors if needed
+                console.error('Error:', errorThrown);
+            }
+        });
+    });
+  </script>
+
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
+<script>
+    // Add a click event listener to all elements with the class "profiles__follow-btn"
+   const followingBtn = document.getElementById('follow-btn');
+   followingBtn.addEventListener("click", function() {
+        const profileId = $(this).data('profile-id');
+        const followersCount = document.getElementById('followers__count');
+        
+        console.log('clicked');
+
+        // Send an AJAX request to your Django view
+        $.ajax({
+            url: '/follow_profile/' + profileId + '/', // Replace with your Django view URL
+            type: 'POST', // You can also use 'GET' depending on your view
+            data: {
+                'profile_id': profileId,
+                'action': 'follow_or_unfollow', // You can define your own action parameter
+            },
+            success: function (data) {
+                // Handle the response if needed 
+                $(followersCount).html(data.count);
+                $(followingBtn).html(data.message);
+                console.log('Follow/unfollow successful');
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Handle errors if needed
+                console.error('Error:', errorThrown);
+            }
+        });
+    });
+</script>
+
+
+
+{% endblock %}
+
+{% block profile-sidebar %}
+active
+{% endblock %}
+
+{% for conversation in conversations %}
+    {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+        {% block unread_messages %}unread_message-notifier-tab{% endblock %}
+        {% block unread_messages-tab %}unread{% endblock %}
+    {% endif %}
+{% endfor %}

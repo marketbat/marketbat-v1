@@ -1,0 +1,133 @@
+{% extends 'markets.html' %}
+{% load static %}
+
+
+{% block market__name %} 
+ETFs
+{% endblock %}
+
+{% block market__name2 %} 
+ETFs
+{% endblock %}
+
+{% block market__name3 %} 
+ETFs
+{% endblock %}
+
+{% block market__table %}
+<div class="">
+    <div class="browse__header">
+        <div class="browse__header-search-bar">
+            <input type="search" id="search_assets" placeholder="🔍 Browse thousands of Financial assets">
+        </div>
+        <div class="browse__header-filters" onchange="updateRowsPerPage()">
+            {% for choice in sentiment_choices %}
+            <span class="sentiment-filters-item">
+                <input type="button" id="{{choice}}" class="sentiment__filters-item-btn " value="{{choice}}" onclick="setFilter('sentiment', this.id)">
+            </span>
+            {% endfor %}
+            <span class="splitter"></span>
+        
+            {% for choice in category_choices %}
+            <span class="category-filters-item">
+                <input type="button" id="{{choice}}" class="category__filters-item-btn disabled" value="{{choice}}" onclick="setFilter('category', this.id)">
+            </span>
+            {% endfor %}
+
+        </div>
+        
+    </div>
+    <div class="browse__body">
+        <table  class="table__body">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                   
+                    <th class="large-table-headers">Sentiment (24h)</th>
+                    <th class="large-table-headers">Strength (24h)</th>
+                    <th class="large-table-headers">Talks (24h)</th>
+                    <th class="large-table-headers">Sentiment (7d)</th>
+                    <th class="large-table-headers">Strength (7d)</th>
+                    <th class="large-table-headers">Talks (7d)</th>
+                    <th class="large-table-headers">Sentiment (30d)</th>
+                    <th class="large-table-headers">Strength (30d)</th>
+                    <th class="large-table-headers">Talks (30d)</th>
+                   
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for asset in assets%}
+                <tr>    
+                    <td><i class='bx {% if asset.current_conversation_volume > asset.yesterday_conversation_volume %}bx-up-arrow-alt{% else %}bx-down-arrow-alt{% endif %}'></i></td>
+                    <td class="table__asset-name">
+                        <span class="table__asset-avatar"><img src="{% static 'images/bitcoin.png'%}" alt=""></span>
+                        <span class="table__asset-name_symbol"><a href="{% url 'asset_details' asset.id %}">{{asset.name}}</a> </span>
+                        <span class="table__asset-symbol">{{asset.symbol}}</span>
+                    </td>
+                    <td>
+                        {{asset.market_price}}
+                    </td>
+                    <td class="category-value" style="display: none;">
+                        <span>
+                            {{ asset.category }}
+                        </span>
+                        
+                    </td>
+                    <td class="sentiment-value {% if asset.current_sentiment == 'Bullish' %}positive{% elif asset.current_sentiment == 'Neutral' %}neutral{% else %}negative{% endif %}" data-duration="twentyfour-hours">
+                        <span>{{ asset.current_sentiment }}</span>
+                    </td>
+                    <td class="intensity-value" data-duration="twentyfour-hours">
+                        <progress class="table__progress" value="{{asset.current_conversation_intensity}}" max="1"></progress>
+                    </td>
+                    <td class="volume-value" data-duration="twentyfour-hours">
+                        <span class="formatted-volume">{{ asset.current_conversation_volume }}</span>
+                    </td>
+                    <td class="sentiment-value {% if asset.week_sentiment == 'Bullish' %}positive{% elif asset.week_sentiment == 'Neutral' %}neutral{% else %}negative{% endif %}" data-duration="seven-days">
+                        <span>{{ asset.week_sentiment }}</span>
+                    </td>
+                    <td class="intensity-value" data-duration="seven-days">
+                        <progress class="table__progress" value="{{asset.week_conversation_intensity}}" max="1"></progress>
+                    </td>
+                    <td class="volume-value" data-duration="seven-days">
+                        <span class="formatted-volume">{{ asset.week_conversation_volume }}</span>
+                    </td>
+                    <td class="sentiment-value {% if asset.month_sentiment == 'Bullish' %}positive{% elif asset.month_sentiment == 'Neutral' %}neutral{% else %}negative{% endif %}" data-duration="thirty-days">
+                        <span>{{ asset.month_sentiment }}</span>
+                    </td>
+                    <td class="intensity-value" data-duration="thirty-days">
+                        <progress class="table__progress" value="{{asset.month_conversation_intensity}}" max="1"></progress>
+                    </td>
+                    <td class="volume-value" data-duration="thirty-days">
+                        <span class="formatted-volume">{{ asset.month_conversation_volume }}</span>
+                    </td>                                                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="no__asset-found">
+            <h1>No Asset Found</h1>
+        </div>
+    </div>
+    <div id="pagination" class="pagination">    
+        <div class="paginators">
+            <button id="prevPageBtn" onclick="previousPage()"><<</button>
+            <span id="pageNumbers" class="page__numbers"></span>
+            <button id="nextPageBtn" onclick="nextPage()">>></button>
+        </div>
+        <div class="rows__per-page">
+            <label for="rowsPerPage">Show Rows:</label>
+            <select id="rowsPerPage" onchange="updateRowsPerPage()">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

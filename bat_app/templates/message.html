@@ -1,0 +1,97 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="messages">
+    <div class="messages__header">
+       <h3>Messages</h3>
+       <div class="">
+        
+        <i class='bx bx-cog' ></i>
+       </div>
+    
+    </div>
+    <div class="search-item">
+        <input type="search" placeholder="Search conversation">
+    </div>
+    <div class="messages__body">
+        <div class="messages__body-item">
+            <div class="messages__body-item-avatar">
+                <i class='bx bx-message-add'></i>
+            </div>
+            <div class="messages__body-item-info">
+                <h3>Message requests</h3>
+                <p>0 message requests</p>
+            </div>
+        </div>
+        {% for conversation in conversations %}
+            <a href="{% url 'conversation' conversation.id %}">
+                <div class="messages__body-item">
+                    <div class="messages__body-item-avatar">
+                        {% if conversation.participants.first == profile %}
+                            {% if conversation.participants.last.profile_picture.url %}
+                            <img class="{% if not conversation.get_last_message.read %}unread{% endif %}" src="{{ conversation.participants.last.profile_picture.url }}" alt="{{ conversation.participants.last.user.username }}">
+                            {% else %}
+                            <img class="{% if not conversation.get_last_message.read %}unread{% endif %}"  src="{% static 'images/user.png' %}" alt="">
+                            {% endif %}
+                            {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+                            <p class="unread_message-notifier"></p>
+                            {% endif %}
+                        {% else %}
+                            {% if conversation.last.profile_picture.url %}
+                            <img class="{% if not conversation.get_last_message.read %}unread{% endif %}" src="{{ conversation.participants.first.profile_picture.url }}" alt="{{ conversation.participants.first.user.username }}">
+                            {% else %}
+                            <img class="{% if not conversation.get_last_message.read %}unread{% endif %}"  src="{% static 'images/user.png' %}" alt="">
+                            {% endif %}
+                            {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+                            <p class="unread_message-notifier"></p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="messages__body-item-info">
+                        <div class="messages__body-item-info-name-time">
+                            {% if conversation.participants.first == profile %}
+                                <h3>{{ conversation.participants.last.display_name }}</h3>
+                            {% else %}
+                                <h3>{{ conversation.participants.first.display_name }}</h3>
+                            {% endif %}
+                            <span class="community-post-symbol">·</span>
+                            <p class="time" data-post-timestamp="{{ conversation.get_last_message.timestamp | date:'U' }}">{{ conversation.get_last_message.timestamp  }}</p>
+                            <p>{{ conversation.get_unread_message_count }}</p>
+                        </div>
+                        {% if conversation.get_last_message.content_type == 'Text' %}
+                            <p>{{ conversation.get_last_message.text }}</p>
+                        {% elif conversation.get_last_message.content_type == 'Image' %}
+                            <p><i class='bx bxs-image'></i> {{ conversation.get_last_message.text }}</p>
+                        {% elif conversation.get_last_message.content_type == 'Video' %}
+                            <p><i class='bx bxs-video' ></i> {{ conversation.get_last_message.text }}</p>  
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            
+        {% endfor %}
+        
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block messages-sidebar %}
+active
+{% endblock %}
+
+
+
+
+{% for conversation in conversations %}
+    {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+        {% block unread_messages %}unread_message-notifier-tab{% endblock %}
+        {% block unread_messages-tab %}unread{% endblock %}
+    {% endif %}
+{% endfor %}

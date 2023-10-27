@@ -1,0 +1,1022 @@
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock %}</title>
+        <!-- Reset -->
+        <link rel="icon" href="{% static 'images/logo-dark.ico' %}" type="image/x-icon">
+        <link rel="icon" href="{% static 'images/logo-dark.png' %}" type="image/png">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize@1.1.0/modern-normalize.min.css">
+
+        <!-- Google fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+         <!--=============== BOXICONS ===============-->
+        <link
+            href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+            rel="stylesheet"
+        />
+          <!-- =============== SWIPER CSS LINK =================== -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+        />
+        <!-- Main stylesheet -->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <!-- <script src="{% static 'js/main.js' %}"></script> -->
+
+         <!-- Include the emoji-picker-element library -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@latest/index.js"></script>
+       
+        {% block scripts %}{% endblock %}
+    </head>
+    <body data-theme="dark">
+
+      <section class="authentication__section">
+        <div class="authentication__container">
+          <div class="authentication__icon">
+            <i id="close-authentication" class='bx bx-x'></i>
+          </div>
+         
+            <div class="authentication__header">
+              <div class="authentication__header-container">
+                <div class="authentication__header-item">
+                  <h2><a href="#login">Log In</a></h2>
+                </div>
+                <div class="authentication__header-item active">
+                  <h2><a href="#signup">Sign Up</a></h2>
+                </div>
+              </div>
+               
+            </div>
+            <div class="authentication__body">
+              <div class="login__container-body">
+                <div class="login__container-item">
+                    <label for="login__email">Username</label>
+                    <input id="login__email" type="email" placeholder="Enter your email address....">
+                </div>
+                <div class="login__container-item password">
+                  <label for="login__password">
+                    <span>Password</span>
+                    <span>
+                      <a href="#forgotpassword">
+                        Forgot Password?
+                      </a>
+                    </span>
+                  </label>
+                  <input  id="login__password" class="login__password" type="password" placeholder="Enter your password....">
+                  <span class="show__password ">
+                    <i class='bx bxs-show'></i>
+                    <i class='bx bxs-hide'></i>
+                  </span>
+                </div>
+                <div class="login__container-item error__message" id="login-error__message">
+              
+                </div>
+                <div class="login__container-item login">
+                  <button id="login__btn">Login</button>
+                </div>
+                <div class="login__container-item">
+                  <p>OR</p>
+                </div>
+                <div class="login__container-item google">
+                  <div class="login__container-item-google">
+                    <a href="">
+                      <span><i class='bx bxl-google' ></i></span>
+                      <span>Continue with Google</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="signup__container-body">
+                <div class="login__container-item">
+                  <label for="signup_firstnamel">First Name</label>
+                  <input id="signup__firstname" type="text" placeholder="Enter your first name....">
+                </div>
+                <div class="login__container-item">
+                  <label for="signup__lastname">Last Name</label>
+                  <input id="signup__lastname" type="text" placeholder="Enter your last name....">
+              </div>
+                <div class="login__container-item">
+                    <label for="signup__email">Email Address</label>
+                    <input id="signup__email" type="email" placeholder="Enter your email address....">
+                </div>
+                <div class="login__container-item">
+                    <label for="signup__username">Username</label>
+                    <input id="signup__username" type="text" placeholder="Enter your username....">
+                </div>
+                <div class="login__container-item password">
+                  <label for="signup__password">
+                    Password
+                    </span>
+                  </label>
+                  <input id="signup__password" class="login__password" type="password" placeholder="Enter your password....">
+                  <span class="show__password ">
+                    <i class='bx bxs-show'></i>
+                    <i class='bx bxs-hide'></i>
+                  </span>
+                </div>
+                <div class="login__container-item password">
+                  <label for="login__password">
+                    Confirm Password
+                    </span>
+                  </label>
+                  <input id="signup__confirm-password" class="login__password" type="password" placeholder="Confirm your password....">
+                  <span class="show__password ">
+                    <i class='bx bxs-show'></i>
+                    <i class='bx bxs-hide'></i>
+                  </span>
+                </div>
+                <div class="login__container-item marketing">
+                  <input type="checkbox" name="" id="marketing__checkbox">
+                  <span>I agree to receive marketing updates from MarketBat.</span>
+                </div>
+
+                <div class="login__container-item login">
+                  <button id="signup__btn"> Create an account</button>
+                </div>
+
+                <div class="login__container-item error__message" id="signup-error__message" >
+                  
+                </div>
+
+                <div class="login__container-item">
+                  <p>OR</p>
+                </div>
+                <div class="login__container-item google">
+                  <div class="login__container-item-google">
+                    <a href="">
+                      <span><i class='bx bxl-google' ></i></span>
+                      <span>Continue with Google</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="login__container-item">
+                  <p class="signup__agreement">By proceeding, you agree to MarketBat’s <br> <span>Terms of Use</span> & <span>Privacy Policy.</span></p>
+                </div>
+              </div>
+             
+            </div>
+        </div>
+      </section>
+
+      <div class="signals-view">
+      </div>
+
+      <div class="signals-create">
+        <div class="signals-create__container">
+            <div class="signal__icon">
+                <i id="close-create-signal" class='bx bx-x'></i>
+            </div>
+            <div class="signals-create__header">
+                <h1>Post Signal</h1>
+                <p>Share your trade insights with other traders around the world.</p>
+            </div>
+            <div class="signals-create__body">
+              <div class="signals-create-item">
+                <label for="signal-create-asset">
+                  Asset <span class="required">*</span>
+                </label>
+                <select id="signal-create-asset" required>
+                  <option value="None">Select Asset</option>
+                  {% for asset in assets %}
+                  <option value="{{asset.id}}">{{asset.name}}</option>
+                  {% endfor %}
+                  
+              </select>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-order-type">
+                  Order Type <span class="required">*</span>
+                </label>
+                <select id="signal-create-order-type" required>
+                  <option value="None">Select Order Type</option>
+                  {% for type in order_types %}
+                  <option value="{{type}}">{{type}}</option>
+                  {% endfor %}
+      
+              </select>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-chart">Attach Chart Image <span class="required">*</span></label>
+                <input type="file" id="signal-create-chart" accept="image/*"  name="signal-chart" required>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-entry-price">Entry Price <span class="required">*</span></label>
+                <input id="signal-create-entry-price" type="number" placeholder="Enter value for entry price" required>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-take-profit">Take Profit <span class="required">*</span></label>
+                <input id="signal-create-take-profit" type="number" placeholder="Enter value for take profit" required>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-stop-loss">Stop Loss <span class="required">*</span></label>
+                <input id="signal-create-stop-loss" type="number" placeholder="Enter value for stop loss" required>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-analysis">Analysis <span class="required">*</span></label>
+                <textarea id="signal-create-analysis" placeholder="Give reason for trade... " required></textarea>
+              </div>
+              <div class="signals-create-item">
+                <label for="signal-create-expiry">When will this oppportunity expire? <span class="required">*</span></label>
+                <input id="signal-create-expiry" type="datetime-local" placeholder="" required>
+              </div>
+              <div class="signals-create-error" id="signals-create-error">
+
+              </div>
+              <div class="signals-create-submit">
+                <button class="" id="submit-signal">Post Signal</button>
+              </div>  
+            </div>
+        </div>
+      </div>
+
+      <div class="communities-create">
+        <div class="communities-create__container">
+            <div class="communitie__icon">
+                <i id="close-create-communities" class='bx bx-x'></i>
+            </div>
+            <div class="communities-create__header">
+                <h1>Create a new community</h1>
+                <p>Start a community for your audience.</p>
+            </div>
+            <div class="communities-create__body">
+              <div class="communities-create-item">
+                <label for="community-create-name">
+                  Community Name <span class="required">*</span>
+                </label>
+                <input id="community-create-name" type="text" placeholder="What will your community be called?" required>
+              </div>
+              <div class="communities-create-item">
+                <label for="community-create-about">
+                  About Community <span class="required">*</span>
+                </label>
+                <textarea name="community-create-about" id="community-create-about" cols="30" rows="10" placeholder="What is your community about?" required></textarea>
+              </div>
+              <div class="communities-create-item">
+                <label for="community-create-dp">Add Community Display Image <span class="required">*</span></label>
+                <input type="file" id="community-create-dp" accept="image/*"  name="community-create-dp" required>
+              </div>
+              <div class="communities-create-item">
+                <label for="community-create-cover-photo">Add Community Cover Photo</label>
+                <input type="file" id="community-create-cover-photo" accept="image/*"  name="community-create-cover-photo">
+              </div>
+          
+              <div class="communities-create-error" id="communities-create-error">
+     
+              </div>
+              <div class="communities-create-submit">
+                <button class="" id="submit-community">Create Community</button>
+              </div>  
+            </div>
+        </div>
+      </div>
+     
+        <!-- HEADER SECTION -->
+      <header>
+          <div class="banner">
+              <div class="banner__assets-items">
+                  {% for asset in assets %}
+                  <div class="banner__assets-item">
+                      <span>{{asset.name}}:</span>
+                      <span class="{% if asset.current_sentiment == 'Bullish' %}positive{% elif asset.current_sentiment == 'Neutral' %}neutral{% else %}negative{% endif %}">
+                          {{ asset.current_sentiment }}
+                      </span>
+                      
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+          <div class="header">
+            <div class="header-left">
+              <a class="header__logo" href="/">
+                  <img id="logo-image" src="{% static 'images/logo-dark.png' %}" alt="">
+              </a>
+              <div class="header__menu">
+                  <div class="header__menu-items">
+                      <div class="header__menu-item">     
+                        <h4>
+                          <a data-authenticated="true" href="/forex_assets">
+                            Forex 
+                          </a>
+                        </h4>
+                      </div>
+                      <div class="header__menu-item">     
+                        <h4>
+                          <a data-authenticated="true" href="/commodities_assets">
+                            Commodities
+                          </a>
+                        </h4>
+                        </div>
+                        <div class="header__menu-item">     
+                          <h4>
+                          <a data-authenticated="true" href="/crypto_assets" >
+                            Cryptocurrency
+                          </a>
+                        </h4>
+                      </div>
+                      <div class="header__menu-item">     
+                        <h4>
+                          <a data-authenticated="true" href="/stocks_assets" >
+                            Stocks
+                          </a>
+                        </h4>
+                      </div>
+                      <div class="header__menu-item">     
+                        <h4>
+                        <a data-authenticated="true" href="/nft_assets" >
+                          NFTs
+                        </a>
+                        </h4>
+                      </div>
+                      <div class="header__menu-item">     
+                        <h4>
+                        <a href="/indices_assets" >
+                              Indices
+                        </a>
+                     
+                      </div>
+                </div>
+            </div>
+          </div>
+              <div class="header-right">
+                <div class="theme__icons">
+                  <i class='bx bx-sun'></i>
+                  <i class='bx bx-moon active'></i>
+                </div>
+                {% if not user.is_authenticated %}
+                <div class="header__buttons">
+                    <button><a href="#login">Log In</a></button>
+                    <button><a href="#signup">Sign Up</a></button>
+                </div> 
+                {% else %}
+                <div class="header__profile-tab">
+                  
+                  <div class="profile__tab header__menu-item">
+                    <div class="profile__tab-name">
+                      {% if profile.profile_picture %}
+                      <img src="{{ profile.profile_picture.url }}" alt="">
+                      {% else %}
+                      <i class='bx bx-user'></i>
+                      {% endif %}
+                      <div class="">
+                        <h3>{{ profile.display_name }}</h3>
+                        <p>@{{profile.user.username}}</p>
+                      </div>
+                    </div>
+                    <div class="header__submenu">
+                      <div class="arrow">
+                      </div>
+                      <div class="profile__tab-links">
+                        <a href="/my_profile">
+                          My Profile
+                        </a>
+                        <a href="/feeds">
+                          My Feeds
+                        </a>
+                        <a href="/notification">
+                          My Notifications
+                        </a>
+                        <a href="/sign_out">
+                          Sign Out
+                        </a>
+                      </div>
+                    </div>
+                  </div> 
+                  <a href="/notification"><i class='bx bxs-bell'></i></a>
+                  <a href="/messages"><i class='bx bx-chat'></i></a>
+                </div>
+                {% endif %}
+              <div  id="header-menu-icon" class="header__menu-icon">
+                <i class='bx bx-menu'></i>
+              </div>
+              
+          </div>
+          <div class="header__menu-collapse" id="header__menu-collapse">
+              <div class="header__menu-collapse-icon">
+                  <i class='bx bx-x' ></i>
+              </div>
+              <div class="header__menu-collapse-items">
+                <div class="header__collapse-menu-item">     
+                  <h4>
+                    <a data-authenticated="true" href="/forex_assets">
+                      Forex 
+                    </a>
+                  </h4>
+                </div>
+                <div class="header__collapse-menu-item">     
+                  <h4>
+                    <a data-authenticated="true" href="/commodities_assets">
+                      Commodities
+                    </a>
+                  </h4>
+                  </div>
+                  <div class="header__collapse-menu-item">     
+                    <h4>
+                    <a data-authenticated="true" href="/crypto_assets" >
+                      Cryptocurrency
+                    </a>
+                  </h4>
+                </div>
+                <div class="header__collapse-menu-item">     
+                  <h4>
+                    <a data-authenticated="true" href="/stocks_assets" >
+                      Stocks
+                    </a>
+                  </h4>
+                </div>
+                <div class="header__collapse-menu-item">     
+                  <h4>
+                  <a data-authenticated="true" href="/nft_assets" >
+                    NFTs
+                  </a>
+                  </h4>
+                </div>
+                <div class="header__collapse-menu-item">     
+                  <h4>
+                  <a href="/indices_assets" >
+                        Indices
+                  </a>
+               
+                </div>
+              
+              </div>
+
+              {% if not user.is_authenticated %}
+              <div class="header__menu-collapse-buttons">
+                  <button> <a href="/#login">Log In</a></button>
+                  <button><a href="/#signup">Sign Up</a></button>
+              </div>
+              {% else %}
+              <div class="profile__tab-links">
+                <a href="/my_profile">
+                  My Profile
+                </a>
+                <a href="/feeds">
+                  My Feeds
+                </a>
+                <a href="/notification">
+                  My Notifications
+                </a>
+                <a href="/sign_out">
+                  Sign Out
+                </a>
+              </div>
+              {% endif %}
+          </div>
+      </header>
+
+      <!-- MAIN SECTION -->
+      <main>
+          {% block main %}{% endblock %}
+      </main>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+
+{% if not request.user.is_authenticated %}
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to all buttons with the data-authenticated attribute
+        $('button[data-authenticated="true"]').on('click', function (event) {
+            // Prevent the default action of the button
+            event.preventDefault();
+
+            // Check if the user is authenticated and redirect to the login page
+            window.location.href = '#login';  // Replace with your login URL
+
+            // Return false to ensure the default action is not executed
+            return false;
+        });
+    });
+</script>
+{% endif %}
+
+{% if not request.user.is_authenticated %}
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to all buttons with the data-authenticated attribute
+        $('a[data-authenticated="true"]').on('click', function (event) {
+            // Prevent the default action of the button
+            event.preventDefault();
+
+            // Check if the user is authenticated and redirect to the login page
+            window.location.href = '#login';  // Replace with your login URL
+
+            // Return false to ensure the default action is not executed
+            return false;
+        });
+    });
+</script>
+{% endif %}
+
+{% if not request.user.is_authenticated %}
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to all buttons with the data-authenticated attribute
+        $('i[data-authenticated="true"]').on('click', function (event) {
+            // Prevent the default action of the button
+            event.preventDefault();
+
+            // Check if the user is authenticated and redirect to the login page
+            window.location.href = '#login';  // Replace with your login URL
+
+            // Return false to ensure the default action is not executed
+            return false;
+        });
+    });
+</script>
+{% endif %}
+
+{% if not request.user.is_authenticated %}
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to all buttons with the data-authenticated attribute
+        $('textarea[data-authenticated="true"]').on('click', function (event) {
+            // Prevent the default action of the button
+            event.preventDefault();
+
+            // Check if the user is authenticated and redirect to the login page
+            window.location.href = '#login';  // Replace with your login URL
+
+            // Return false to ensure the default action is not executed
+            return false;
+        });
+    });
+</script>
+{% endif %}
+
+{% if not request.user.is_authenticated %}
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to all buttons with the data-authenticated attribute
+        $('input[data-authenticated="true"]').on('click', function (event) {
+            // Prevent the default action of the button
+            event.preventDefault();
+
+            // Check if the user is authenticated and redirect to the login page
+            window.location.href = '#login';  // Replace with your login URL
+
+            // Return false to ensure the default action is not executed
+            return false;
+        });
+    });
+</script>
+{% endif %}
+
+      <script>
+          const toggleButton = document.querySelector(".header__menu-icon");
+          const menuBar = document.querySelector(".header__menu-collapse");
+          const removeMenuBar = document.querySelector(".header__menu-collapse-icon");
+    
+          toggleButton.addEventListener("click", function () {
+            if (menuBar.classList.contains("active")) {
+              menuBar.classList.remove("active");
+            } else {
+              menuBar.classList.add("active");
+            }
+          });
+          removeMenuBar.addEventListener("click", function () {
+            menuBar.classList.remove("active");
+          });
+    
+      </script>
+
+      <script>
+          var swiper = new Swiper(".mySwiper", {
+              spaceBetween: 30,
+              centeredSlides: true,
+              autoplay: {
+              delay: 2500,
+              disableOnInteraction: false,
+              },
+              pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+              },
+  
+          });
+      </script>
+
+      <script>
+          const headerItems = document.querySelectorAll('.header__collapse-menu-item');
+  
+          headerItems.forEach((item) => {
+              item.addEventListener('click', () => {
+                  headerItems.forEach((otherItem) => {
+                      if (item !== otherItem) {
+                          otherItem.classList.remove('active');
+                      }
+                  });
+                  item.classList.toggle('active');
+              });
+          });
+  
+      </script>
+
+      <script>
+          // Check local storage
+          let localS = localStorage.getItem('theme'),
+            themeToSet = localS
+      
+          // If local storage is not set, we check the OS preference
+          if (!localS) {
+            themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+      
+          // Set the correct theme
+          document.documentElement.setAttribute('data-theme', themeToSet)
+      </script>
+
+      <script>
+        const logoImage = document.getElementById('logo-image');
+        const rootElem = document.documentElement;
+        const themeBtn = document.querySelector(".theme__icons");
+        const sunButton = document.querySelector(".bx-sun");
+        const moonButton = document.querySelector(".bx-moon");
+
+        function updateLogoImage() {
+            const theme = rootElem.getAttribute('data-theme');
+            if (theme === 'light') {
+                logoImage.src = '{% static "images/logo-light.png" %}';
+            } else {
+                logoImage.src = '{% static "images/logo-dark.png" %}';
+            }
+        }
+
+        function switchTheme() {
+            let dataTheme = rootElem.getAttribute('data-theme');
+            let newTheme = (dataTheme === 'light') ? 'dark' : 'light';
+            
+            rootElem.setAttribute('data-theme', newTheme);
+            localStorage.setItem("theme", newTheme);
+
+            // Update the logo image
+            updateLogoImage();
+        }
+
+        // Initial update on page load
+        updateLogoImage();
+
+        // Theme switcher event listener
+        themeBtn.addEventListener("click", function () {
+            if (sunButton.classList.contains("active")) {
+                sunButton.classList.remove("active");
+                moonButton.classList.add("active");
+                switchTheme();
+            } else {
+                moonButton.classList.remove("active");
+                sunButton.classList.add("active");
+                switchTheme();
+            }
+        });
+
+      </script>
+
+      <script>
+        const passwordInputs = document.querySelectorAll(".login__password");
+        const showPasswordBtns = document.querySelectorAll(".show__password");
+
+        showPasswordBtns.forEach((showPasswordBtn, index) => {
+            showPasswordBtn.addEventListener("click", () => {
+                if (passwordInputs[index].type === "password") {
+                    passwordInputs[index].type = "text";
+                    showPasswordBtn.classList.add("active");
+                } else {
+                    passwordInputs[index].type = "password";
+                    showPasswordBtn.classList.remove("active");
+                }
+            });
+        });
+
+
+
+      </script>
+
+      <script>
+          // Get the authentication container and its child elements
+          const closeBtn = document.getElementById('close-authentication')
+          const authenticationSection = document.querySelector(".authentication__section");
+          const loginContainer = authenticationSection.querySelector(".login__container-body");
+          const signupContainer = authenticationSection.querySelector(".signup__container-body");
+          const loginHeader = authenticationSection.querySelector(".authentication__header-item:first-child");
+          const signupHeader = authenticationSection.querySelector(".authentication__header-item:last-child");
+
+      
+          // Function to show the authentication container
+          function showAuthenticationContainer() {
+              authenticationSection.style.display = "flex";
+          }
+      
+          // Function to hide the authentication container
+          function hideAuthenticationContainer() {
+            authenticationSection.style.display = "none";
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+      
+          // Function to show the login container
+          function showLoginContainer() {
+              showAuthenticationContainer();
+              loginContainer.style.display = "block";
+              signupContainer.style.display = "none";
+              loginHeader.classList.add("active");
+              signupHeader.classList.remove("active");
+          }
+      
+          // Function to show the signup container
+          function showSignupContainer() {
+              showAuthenticationContainer();
+              loginContainer.style.display = "none";
+              signupContainer.style.display = "block";
+              loginHeader.classList.remove("active");
+              signupHeader.classList.add("active");
+          }
+      
+          // Hide the authentication container initially
+          hideAuthenticationContainer();
+      
+          // Initial page load based on the URL hash
+          if (window.location.hash === "#login") {
+              showLoginContainer();
+          } else if (window.location.hash === "#signup") {
+              showSignupContainer();
+          }
+      
+          // Listen for changes in the URL hash (e.g., when the user clicks a link)
+          window.addEventListener("hashchange", () => {
+              if (window.location.hash === "#login") {
+                  showLoginContainer();
+              } else if (window.location.hash === "#signup") {
+                  showSignupContainer();
+              }
+          });
+
+          
+    
+
+          closeBtn.addEventListener("click", function () {
+            hideAuthenticationContainer();
+          });
+      </script>
+
+      <script>
+        const emailLogin = document.getElementById('login__email');
+        const passwordLogin = document.getElementById('login__password');
+        const loginBtn = document.getElementById('login__btn');
+        const cLogErrorMessage = document.getElementById('login-error__message');
+
+        // To disable the button
+        
+
+        loginBtn.addEventListener("click", function () {
+            const emailValue = emailLogin.value;
+            const passwordValue = passwordLogin.value;
+
+            $.ajax({
+                url: 'login',
+                method: 'POST',
+                data: {
+                    email: emailValue,
+                    password: passwordValue,
+                },
+                success: function (response) {
+                    if (response.message === 'success') {
+                        // Redirect or perform other actions for a successful login
+                        console.log("Logged in successfully");
+                        window.location.href = "/";
+                        
+                    } else {
+                        
+                        console.log("Unexpected response:", response);
+                        cLogErrorMessage.style.display = 'block';
+                        cLogErrorMessage.textContent = 'An error occured, please try again.';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400) {
+                        cLogErrorMessage.style.display = 'block';
+                        cLogErrorMessage.textContent = xhr.responseJSON.error;
+                        console.log("Invalid login credentials");
+                    } else {
+
+                        cLogErrorMessage.style.display = 'block';
+                        cLogErrorMessage.textContent = 'An error occured, please try again.';
+                        console.log("Error:", status, error);
+                    }
+                }
+            });
+        });
+            function areLoginFieldsEmpty() {
+                const emailValue = emailLogin.value.trim(); // Trim to remove leading/trailing spaces
+                const passwordValue = passwordLogin.value.trim();
+                return emailValue === '' || passwordValue === '';
+                
+            }
+
+            // Function to enable or disable the login button based on field values
+            function toggleLoginButton() {
+            if (areLoginFieldsEmpty()) {
+              loginBtn.classList.add('disabled');
+            }
+            else {
+              loginBtn.classList.remove('disabled');
+            }
+                
+            }
+
+            // Add event listeners to the email and password fields
+            emailLogin.addEventListener('input', toggleLoginButton);
+            passwordLogin.addEventListener('input', toggleLoginButton);
+
+            // Initial check to disable the button if fields are empty on page load
+            toggleLoginButton();
+
+      </script>
+
+      <script>
+        const emailSignup = document.getElementById('signup__email');
+        const firstName = document.getElementById('signup__firstname');
+        const lastName = document.getElementById('signup__lastname');
+        const userName = document.getElementById('signup__username');
+        
+        const passwordSignup = document.getElementById('signup__password');
+        const confirmPasswordSignup = document.getElementById('signup__confirm-password');
+        const signupBtn = document.getElementById('signup__btn');
+        const cSignErrorMessage = document.getElementById('signup-error__message');
+        const marketCheckbox = document.getElementById('marketing__checkbox');
+
+        signupBtn.addEventListener("click", function () {
+            const emailSignupValue = emailSignup.value;
+            const firstNameValue = firstName.value;
+            const lastNameValue =lastName.value;
+            const userNameValue = userName.value;
+            const passwordSignupValue = passwordSignup.value;
+            const confirmPasswordSignupValue = confirmPasswordSignup.value;
+
+            if (passwordSignupValue !== confirmPasswordSignupValue ) {
+              cSignErrorMessage.style.display = 'block';
+              cSignErrorMessage.textContent = "Passwords do not match";
+              console.log("Passwords do not match")
+            } else if(passwordSignupValue == '' ||  confirmPasswordSignupValue == '') {
+              cSignErrorMessage.style.display = 'block';
+              cSignErrorMessage.textContent = "Please Input Passwords";
+              console.log("Please Input Passwords")
+            } else {
+              $.ajax({
+                url: 'signup',
+                method: 'POST',
+                data: { 
+                  email: emailSignupValue, 
+                  password: passwordSignupValue,
+                  first_name: firstNameValue,
+                  last_name: lastNameValue,
+                  username: userNameValue
+                },
+                success: function (response) {
+                    if (response.message === 'success') {
+                        // Redirect or perform other actions for a successful login
+                        console.log("Signed Up successfully");
+                        window.location.href = "/";
+                        
+                    } else {
+                        
+                        console.log("Unexpected response:", response);
+                        cSignErrorMessage.style.display = 'block';
+                        cSignErrorMessage.textContent = 'An error occured, please try again.';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400) {
+                        cSignErrorMessage.style.display = 'block';
+                        cSignErrorMessage.textContent = xhr.responseJSON.error;
+                        console.log("User already exists.");
+                    } else {
+
+                        cSignErrorMessage.style.display = 'block';
+                        cSignErrorMessage.textContent = 'An error occured, please try again.';
+                        console.log("Error:", status, error);
+                    }
+                }
+              });
+            }
+            
+          });
+
+          function areSignupFieldsEmpty() {
+              const emailSignupValue = emailSignup.value.trim();
+              const passwordSignupValue = passwordSignup.value.trim();
+              const confirmPasswordSignupValue = confirmPasswordSignup.value.trim();
+
+              return !marketCheckbox.checked || emailSignupValue === '' || passwordSignupValue === '' || confirmPasswordSignupValue === '' ;
+          }
+
+
+            // Function to enable or disable the login button based on field values
+            function toggleSignupButton() {
+            if (areSignupFieldsEmpty()) {
+              signupBtn.classList.add('disabled');
+            }
+            else {
+              signupBtn.classList.remove('disabled');
+            }
+                
+            }
+
+            // Add event listeners to the email and password fields
+            emailSignup.addEventListener('input', toggleSignupButton);
+            passwordSignup.addEventListener('input', toggleSignupButton);
+            confirmPasswordSignup.addEventListener('input', toggleSignupButton);
+            marketCheckbox.addEventListener('click', toggleSignupButton);
+
+            // Initial check to disable the button if fields are empty on page load
+            toggleSignupButton();
+      </script>
+
+      <script>
+        function updateRelativeTime() {
+            const timeElements = document.querySelectorAll('.time');
+            const now = Math.floor(Date.now() / 1000); // Current time in seconds
+
+            timeElements.forEach((timeElement) => {
+                const postTimestamp = parseInt(timeElement.getAttribute('data-post-timestamp'));
+                const timeDifference = now - postTimestamp;
+
+                if (timeDifference < 60) {
+                // Less than a minute
+                timeElement.textContent = timeDifference + 's';
+                } else if (timeDifference < 3600) {
+                // Less than an hour
+                timeElement.textContent = Math.floor(timeDifference / 60) + 'm';
+                } else if (timeDifference < 86400) {
+                // Less than a day
+                timeElement.textContent = Math.floor(timeDifference / 3600) + 'h';
+                } else {
+                // More than a day, show the full date
+                const date = new Date(postTimestamp * 1000);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                });
+                timeElement.textContent = formattedDate;
+                }
+            });
+        }
+
+        // Call the function initially to format existing timestamps
+        updateRelativeTime();
+
+        // You can also set an interval to periodically update the timestamps
+        setInterval(updateRelativeTime, 60000); // Update every minute
+
+      </script>
+
+      <script>
+        function updateRelativeTime() {
+            const timeElements = document.querySelectorAll('.time');
+            const now = Math.floor(Date.now() / 1000); // Current time in seconds
+
+            timeElements.forEach((timeElement) => {
+                const postTimestamp = parseInt(timeElement.getAttribute('data-post-timestamp'));
+                const timeDifference = now - postTimestamp;
+
+                if (timeDifference < 60) {
+                // Less than a minute
+                timeElement.textContent = timeDifference + 's';
+                } else if (timeDifference < 3600) {
+                // Less than an hour
+                timeElement.textContent = Math.floor(timeDifference / 60) + 'm';
+                } else if (timeDifference < 86400) {
+                // Less than a day
+                timeElement.textContent = Math.floor(timeDifference / 3600) + 'h';
+                } else {
+                // More than a day, show the full date
+                const date = new Date(postTimestamp * 1000);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                });
+                timeElement.textContent = formattedDate;
+                }
+            });
+        }
+
+        // Call the function initially to format existing timestamps
+        updateRelativeTime();
+
+        // You can also set an interval to periodically update the timestamps
+        setInterval(updateRelativeTime, 60000); // Update every minute
+
+      </script>        
+        
+    </body>
+</html>
+{% endblock content %}

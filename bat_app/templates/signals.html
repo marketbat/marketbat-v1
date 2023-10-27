@@ -1,0 +1,633 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="signals">
+    <div class="signals__container">
+        <div class="signals__header">
+            <div class="signals__header-title">
+                <h3>Trade Signals</h3>
+                <button id="create-signal">Create signal</button>
+            </div>
+            <p>The signals provided by users on this platform are not endorsed or sponsored by MarketBat; please use them at your own discretion and risk.</p>
+        </div>
+
+        <div class="signals__header-container">
+            <div class="signals__header-item active">
+            <p><a href="#browse-signals">Browse signals</a></p>
+            </div>
+            <div class="signals__header-item ">
+            <p><a href="#my-signals">My signals</a></p>
+            </div>
+        </div>
+
+        <div class="signals__search search-item">
+            <input id="search-signals" type="search" placeholder="Search signals">
+        </div>
+
+        <div class="signals__body">
+            <div class="signals__body-items browse_signals">
+                {% for signal in signals %}
+                <div class="signals__body-item" data-signal-id="{{ signal.id }}" >
+                    <div class="signals__body-item-chart">
+                        <p class="signals__body-item-symbol">
+                            {{ signal.asset.name }}
+                        </p>
+                        <img src="{{ signal.chart.url }}" alt="{{ signal.asset.name }}">
+                        <button class="view-analysis-button" data-signal-id="{{ signal.id }}">View Analysis</button>
+                    </div>
+                    <div class="signals__body-item-bottom">
+                        <div class="signals__body-item-description">
+                            <div class="signals__body-item-order-type">
+                                <p>Order Type</p>
+                                <h3 class="neutral">{{ signal.order_type }}</h3>
+                            </div>
+                            <div class="signals__body-item-entry-price">
+                                <p>Entry Price</p>
+                                <h3 class="neutral">{{ signal.entry_price }}</h3>
+                            </div>
+                            <div class="signals__body-item-take-profit">
+                                <p>Take profit</p>
+                                <h3 class="positive">{{ signal.takeprofit }}</h3>
+                                
+                            </div>
+                            <div class="signals__body-item-stop-loss">
+                                <p>Stop loss</p>
+                                <h3 class="negative">{{ signal.stoploss }}</h3>
+                            </div>
+                        </div>
+                        <div class="signals__body-item-votes">
+                            <span class="signals__body-item-votes-container">
+                                <i data-signal-id="{{ signal.id }}" data-vote-type="upvote" class='bx bxs-up-arrow signal-upvote {% if profile in signal.upvotes.all%} active {% endif %}'></i>
+                                <i data-signal-id="{{ signal.id }}" data-vote-type="downvote" class='bx bxs-down-arrow signal-downvote {% if profile in signal.downvotes.all%} active {% endif %}'></i>
+                            </span>
+                            <div class="span signals__body-item-votes-results">
+                                <p id="upvotes-count-{{signal.id}}">{{ signal.upvotes.count }}</p>
+                                <p id="downvotes-count-{{signal.id}}">{{ signal.downvotes.count }}</p>
+                            </div>
+            
+                        </div>
+                    </div>
+                    <div class="signals__body-item-footer">
+                        <div class="signals__body-item-profile">
+                            
+                            {% if signal.profile.profile_picture.url %}
+                            <a href="{% url 'user_profile' signal.profile.username %}">
+                                <img src="{{ signal.profile.profile_picture.url }}" alt="">
+                            </a>
+                            {% else %}
+                            <a href="{% url 'user_profile' signal.profile.username %}">
+                                <i class='bx bx-user'></i>
+                            </a>
+                            {% endif %}
+                            <div class="">
+                                <a href="{% url 'user_profile' signal.profile.username %}">
+                                    <p>{{signal.profile.user.username}}</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="signals__body-item-expiry">
+                            <i class='bx bx-time-five' ></i>
+                            <p class="signal-time" data-post-timestamp="{{ signal.expiry }}">{{ signal.expiry }}</p>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="signals__body-items my_signals">
+                {% for signal in my_signals %}
+                <div class="signals__body-item" data-signal-id="{{ signal.id }}" >
+                    <div class="signals__body-item-chart">
+                        <p class="signals__body-item-symbol">
+                            {{ signal.asset.name }}
+                        </p>
+                        <img src="{{ signal.chart.url }}" alt="{{ signal.asset.name }}">
+                        <button class="view-analysis-button" data-signal-id="{{ signal.id }}">View Analysis</button>
+                    </div>
+                    <div class="signals__body-item-bottom">
+                        <div class="signals__body-item-description">
+                            <div class="signals__body-item-order-type">
+                                <p>Order Type</p>
+                                <h3 class="neutral">{{ signal.order_type }}</h3>
+                            </div>
+                            <div class="signals__body-item-entry-price">
+                                <p>Entry Price</p>
+                                <h3 class="neutral">{{ signal.entry_price }}</h3>
+                            </div>
+                            <div class="signals__body-item-take-profit">
+                                <p>Take profit</p>
+                                <h3 class="positive">{{ signal.takeprofit }}</h3>
+                                
+                            </div>
+                            <div class="signals__body-item-stop-loss">
+                                <p>Stop loss</p>
+                                <h3 class="negative">{{ signal.stoploss }}</h3>
+                            </div>
+                        </div>
+                        <div class="signals__body-item-votes">
+                            <span class="signals__body-item-votes-container">
+                                <i data-signal-id="{{ signal.id }}" data-vote-type="upvote" class='disabled bx bxs-up-arrow signal-upvote {% if profile in signal.upvotes.all%} active {% endif %}'></i>
+                                <i data-signal-id="{{ signal.id }}" data-vote-type="downvote" class='disabled  bx bxs-down-arrow signal-downvote {% if profile in signal.downvotes.all%} active {% endif %}'></i>
+                            </span>
+                            <div class="span signals__body-item-votes-results">
+                                <p id="upvotes-count-{{signal.id}}" class="upvotes-count-{{signal.id}}">{{ signal.upvotes.count }}</p>
+                                <p id="downvotes-count-{{signal.id}}" class="downvotes-count-{{signal.id}}">{{ signal.downvotes.count }}</p>
+                            </div>
+            
+                        </div>
+                    </div>
+                    <div class="signals__body-item-footer">
+                        <div class="signals__body-item-profile">
+                            
+                            {% if signal.profile.profile_picture.url %}
+                            <a href="{% url 'user_profile' signal.profile.username %}">
+                                <img src="{{ signal.profile.profile_picture.url }}" alt="">
+                            </a>
+                            {% else %}
+                            <a href="{% url 'user_profile' signal.profile.username %}">
+                                <i class='bx bx-user'></i>
+                            </a>
+                            {% endif %}
+                            <div class="">
+                                <a href="{% url 'user_profile' signal.profile.username %}">
+                                    <p>{{signal.profile.user.username}}</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="signals__body-item-expiry">
+                            <i class='bx bx-time-five' ></i>
+                            <p class="signal-time" data-post-timestamp="{{ signal.expiry }}">{{ signal.expiry }}</p>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
+            <div class="no-signal-results">No signal found</div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const viewButtons = document.querySelectorAll(".view-analysis-button");
+    const viewContainer = document.querySelector(".signals-view");
+    
+
+    // Click event listener for each "View Analysis" button
+    viewButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Get the signal ID from the clicked button
+            const signalId = button.getAttribute("data-signal-id");
+
+            // Fetch the signal details using AJAX
+            fetch(`get_signal_details/${signalId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the view container with the signal details
+                    viewContainer.innerHTML = `
+                        <!-- Add HTML structure to display the signal details -->
+                        
+                        <div class="signals-view__container">
+                            <div class="signal__icon">
+                                <i id="close-signal" class='bx bx-x'></i>
+                            </div>
+                            <div class="signals-view__left">
+                                <img src="${data.chartUrl}" alt="">
+                            </div>
+                            <div class="signals-view__right">
+                                <h1>
+                                    ${data.name}
+                                </h1>
+                            </div>
+                            <div class="signals__body-item-bottom">
+                                <div class="signals__body-item-description">
+                                    <div class="signals__body-item-order-type">
+                                        <p>Order Type</p>
+                                        <h3 class="neutral">${data.orderType}</h3>
+                                    </div>
+                                    <div class="signals__body-item-entry-price">
+                                        <p>Entry Price</p>
+                                        <h3 class="neutral">${data.entryPrice}</h3>
+                                    </div>
+                                    <div class="signals__body-item-take-profit">
+                                        <p>Take profit</p>
+                                        <h3 class="positive">${data.takeProfit}</h3>
+                                    </div>
+                                    <div class="signals__body-item-stop-loss">
+                                        <p>Stop loss</p>
+                                        <h3 class="negative">${data.stopLoss}</h3>
+                                    </div>
+                                </div>
+                                <div class="signals__body-item-votes">
+                                    <span class="signals__body-item-votes-container">
+                                        <i class='bx bxs-up-arrow  signal-upvote ${data.profileOwner ? 'disabled' : ''}  ${data.profileInUpvotes ? 'active' : ''}' data-asset-id="${signalId}"></i>
+                                        <i class='bx bxs-down-arrow signal-downvote ${data.profileOwner ? 'disabled' : ''}  ${data.profileInDownvotes ? 'active' : ''}' data-asset-id="${signalId}"></i>
+                                    </span>
+                                    <div class="span signals__body-item-votes-results">
+                                        <p id="upvotes-count-${signalId}">${data.upvotes}</p>
+                                        <p id="downvotes-count-${signalId}">${data.downvotes}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="signals__body-item-analysis">
+                                <h4>Analysis</h4>
+                                <p>
+                                    ${data.analysis}
+                                </p>
+                            </div>
+                            <div class="signals__body-item-footer">
+                                <div class="signals__body-item-profile">
+                                    ${data.profilePicture ? `<img src="${data.profilePicture}" alt="">` : '<i class="bx bx-user"></i>'}
+                                    <div>
+                                        <p>${data.profileName}</p>
+                                    </div>
+                                </div>
+                                <div class="signals__body-item-expiry">
+                                    <i class="bx bx-time-five"></i>
+                                    <p class="time" data-post-timestamp="${data.expiry}">${data.expiry}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    // Display the view container
+                    viewContainer.style.display = "flex";
+                    const expiryDate = new Date(data.expiry);  // Parse the ISO 8601 date string
+
+                    // Format the date using JavaScript
+                    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'};
+                    const formattedExpiry = expiryDate.toLocaleString('en-US', options);
+
+                    // Now, set the formatted date in your HTML element
+                    const timeElement = document.querySelector(".time");
+                    timeElement.textContent = formattedExpiry;
+                    const closeSignalButton = document.getElementById("close-signal");
+                    closeSignalButton.addEventListener("click", function() {
+                                // Clear the view container and hide it
+                                viewContainer.innerHTML = "";
+                                viewContainer.style.display = "none";
+                            });
+                    
+
+                    const upvoteButton = document.querySelector('.signal-upvote');
+                    const downvoteButton = document.querySelector('.signal-downvote');
+                    upvoteButton.addEventListener('click', () => {
+                        if (!upvoteButton.classList.contains('active')) {
+                            upvoteButton.classList.add('active');
+                            downvoteButton.classList.remove('active');
+
+                            // Update the vote on the server and switch to bullish
+                            updateViewVote('upvote', signalId);
+                        }
+                    });
+
+                    downvoteButton.addEventListener('click', () => {
+                        if (!downvoteButton.classList.contains('active')) {
+                            downvoteButton.classList.add('active');
+                            upvoteButton.classList.remove('active');
+
+                            // Update the vote on the server and switch to bullish
+                            updateViewVote('downvote', signalId);
+                        }
+                    });
+                    function updateViewVote(voteType, signalId) {
+                        $.ajax({
+                            url: `/update_vote/${signalId}/${voteType}`,
+                            method: 'POST',
+                            data: {},
+                            success: function (response) {
+                                if (response.message === 'success') {
+                                    // Update the displayed vote percentages and total polls for the specific asset
+                                
+                                    const upvoteCountElement = document.getElementById(`upvotes-count-${signalId}`);
+                                    const downvoteCountElement = document.getElementById(`downvotes-count-${signalId}`);
+
+                                    if (upvoteCountElement && downvoteCountElement) {
+                                        upvoteCountElement.textContent = response.upvotes_count;
+                                        downvoteCountElement.textContent = response.downvotes_count;
+                                    }
+                                } else if (response.message === 'not_authenticated') {
+                                    // Handle not authenticated
+                                } else {
+                                    console.log('Unexpected response:', response);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Error:', status, error);
+                            }
+                        });
+                    }
+                    
+                
+
+                })
+                .catch(error => {
+                    console.error("Error fetching signal details: " + error);
+                });
+        });
+    });
+
+    // Close button for the view container
+    
+});
+
+</script>
+
+<script>
+    const expiryDate = new Date(data.expiry);  // Parse the ISO 8601 date string
+
+    // Format the date using JavaScript
+    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    const formattedExpiry = expiryDate.toLocaleString('en-US', options);
+
+    // Now, set the formatted date in your HTML element
+    const timeElement = document.querySelector(".signal-time");
+    timeElement.textContent = formattedExpiry;
+</script>
+
+<script>
+    const createBtn = document.getElementById('create-signal')
+    const createSignalContainer = document.querySelector('.signals-create')
+    const closeCreateSignalButton = document.getElementById("close-create-signal");
+    closeCreateSignalButton.addEventListener("click", function() {
+        createSignalContainer.style.display = "none";
+        });
+
+    createBtn.addEventListener("click", function() {
+        createSignalContainer.style.display = 'flex'
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const createSignalPostBtn = document.getElementById("submit-signal");
+        const signalError = document.getElementById("signals-create-error");
+      
+    
+      // Function to check if all required fields are filled
+      function isFormComplete() {
+        // Gather all the required input fields
+        const requiredFields = document.querySelectorAll("input[required], textarea[required], select[required]");
+ 
+       // Check each required field
+        for (const field of requiredFields) {
+        // Trim the field value and check if it's empty or "None"
+        if (field.value.trim() === "" || field.value.trim() === "None") {
+            return false; // Field is empty or "None," the form is not complete
+        }
+        }
+        
+        return true; // All required fields are filled, the form is complete
+      }
+  
+      // Function to update the button state
+      function updateButtonState() {
+        if (isFormComplete()) {
+          createSignalPostBtn.removeAttribute("disabled");
+          createSignalPostBtn.classList.remove('disabled');
+        } else {
+          createSignalPostBtn.setAttribute("disabled", "disabled");
+          createSignalPostBtn.classList.add('disabled');
+        }
+      }
+  
+      // Add an event listener to all form fields
+      const formFields = document.querySelectorAll("input, textarea, select");
+      for (const field of formFields) {
+        field.addEventListener("input", updateButtonState);
+      }
+  
+      // Initial check for form completeness
+      updateButtonState();
+  
+      createSignalPostBtn.addEventListener("click", function () {
+        if (isFormComplete()) {
+            
+            const signalChart = document.getElementById('signal-create-chart').files[0];
+            const signalAsset = document.getElementById('signal-create-asset').value;
+            const signalOrderType = document.getElementById('signal-create-order-type').value;
+            const signalEntryPrice = document.getElementById('signal-create-entry-price').value;
+            const signalTakeProfit = document.getElementById('signal-create-take-profit').value;
+            const signalStopLoss = document.getElementById('signal-create-stop-loss').value;
+            const signalAnalysis = document.getElementById('signal-create-analysis').value;
+            const signalExpiry = document.getElementById('signal-create-expiry').value;
+            const formData = new FormData();
+            formData.append("signalChart", signalChart);
+            formData.append("signalAsset", signalAsset);
+            formData.append("signalOrderType", signalOrderType);
+            formData.append("signalEntryPrice", signalEntryPrice);
+            formData.append("signalTakeProfit", signalTakeProfit);
+            formData.append("signalStopLoss", signalStopLoss);
+            formData.append("signalAnalysis", signalAnalysis);
+            formData.append("signalExpiry", signalExpiry);
+
+            $.ajax({
+                url: "create_signal",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                window.location.reload()
+                if (response.message === "success") {
+                    // Redirect or perform other actions for a successful campaign creation
+                    console.log("Campaign created successfully");
+                    window.location.reload();
+                } else {
+                    console.log("Unexpected response:", response);
+                    var signalError = document.getElementById('signals-create-error');
+                    signalError.style.display = 'flex';
+
+                    // Check if the response is valid JSON
+                    var response;
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                        var errorMessage = response.message;
+                        signalError.innerHTML = 'Error: ' + errorMessage;
+                    } catch (e) {
+                        // If parsing the response as JSON fails, log the response for debugging
+                        console.log('Invalid JSON response from the server:', xhr.responseText);
+                        signalError.innerHTML = 'Error: There was an issue creating campaign, please check all values again.';
+                    }
+                    }
+                    },
+                error: function(xhr, status, error) {
+                    var signalError = document.getElementById('signals-create-error');
+                    signalError.style.display = 'flex';
+
+                    // Check if the response is valid JSON
+                    var response;
+                    try {
+                    response = JSON.parse(xhr.responseText);
+                    var errorMessage = response.message;
+                    signalError.innerHTML = 'Error: ' + errorMessage;
+                    } catch (e) {
+                    // If parsing the response as JSON fails, log the response for debugging
+                    console.log('Invalid JSON response from the server:', xhr.responseText);
+                    signalError.innerHTML = 'Error: There was an issue creating campaign, please check all values again.';
+                    }
+                },
+
+
+
+       });
+            
+
+
+        } else {
+          signalError.style.display = 'flex';
+          signalError.innerHTML = 'Please fill in all required fields.';
+        }
+      });
+    });
+</script>
+
+<script>
+    // Get all the buttons with class 'polls__body-item-bullish' and 'polls__body-item-bearish'
+
+const voteContainers = document.querySelectorAll('.signals__body-item')
+
+// Add click event listeners to the bullish buttons
+voteContainers.forEach(container => {
+    const upvoteButton = container.querySelector('.signal-upvote');
+    const downvoteButton = container.querySelector('.signal-downvote');
+    upvoteButton.addEventListener('click', () => {
+        if (!upvoteButton.classList.contains('active')) {
+            upvoteButton.classList.add('active');
+            downvoteButton.classList.remove('active');
+
+            // Update the vote on the server and switch to bullish
+            updateVote('upvote', container.dataset.signalId);
+        }
+    });
+
+    downvoteButton.addEventListener('click', () => {
+        if (!downvoteButton.classList.contains('active')) {
+            downvoteButton.classList.add('active');
+            upvoteButton.classList.remove('active');
+
+            // Update the vote on the server and switch to bullish
+            updateVote('downvote', container.dataset.signalId);
+        }
+    });
+});
+
+// Function to update the vote on the server
+function updateVote(voteType, signalId) {
+    $.ajax({
+        url: `/update_vote/${signalId}/${voteType}`,
+        method: 'POST',
+        data: {},
+        success: function (response) {
+            if (response.message === 'success') {
+                // Update the displayed vote percentages and total polls for the specific asset
+            
+                const upvoteCountElement = document.getElementById(`upvotes-count-${signalId}`);
+                const downvoteCountElement = document.getElementById(`downvotes-count-${signalId}`);
+
+                if (upvoteCountElement && downvoteCountElement) {
+                    upvoteCountElement.textContent = response.upvotes_count;
+                    downvoteCountElement.textContent = response.downvotes_count;
+                }
+            } else if (response.message === 'not_authenticated') {
+                // Handle not authenticated
+            } else {
+                console.log('Unexpected response:', response);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log('Error:', status, error);
+        }
+    });
+}
+
+
+</script>
+
+<script>
+    function filterSignals() {
+        var input = document.getElementById('search-signals');
+        var filter = input.value.toUpperCase();
+        var signalItems = document.querySelectorAll('.signals__body-item');
+        var noSignalContainer = document.querySelector('.no-signal-results');
+
+        signalItems.forEach(function(item) {
+            var symbol = item.querySelector('.signals__body-item-symbol').textContent.toUpperCase();
+
+            if (symbol.indexOf(filter) > -1) {
+                item.style.display = 'block';
+                noSignalContainer.style.display = 'none';
+            } else {
+                item.style.display = 'none';
+                noSignalContainer.style.display = 'flex';
+            }
+        });
+    }
+
+    var searchInput = document.getElementById('search-signals');
+    searchInput.addEventListener('input', filterSignals);
+</script>
+
+
+<script>
+    // Get the authentication container and its child elements
+
+    const browseSignalContainer = document.querySelector(".browse_signals");
+    const mySignalContainer = document.querySelector(".my_signals");
+    const browseSignalHeader = document.querySelector(".signals__header-item:first-child");
+    const mySignalHeader = document.querySelector(".signals__header-item:last-child");
+
+
+    // Function to show the login container
+    function showBrowseSignalContainer() {
+        browseSignalContainer.style.display = "grid";
+        mySignalContainer.style.display = "none";
+        browseSignalHeader.classList.add("active");
+        mySignalHeader.classList.remove("active");
+    }
+
+    // Function to show the signup container
+    function showMySignalContainer() {
+        browseSignalContainer.style.display = "none";
+        mySignalContainer.style.display = "grid";
+        browseSignalHeader.classList.remove("active");
+        mySignalHeader.classList.add("active");
+    }
+
+
+    // Initial page load based on the URL hash
+    if (window.location.hash === "#browse-signals") {
+        showBrowseSignalContainer();
+    } else if (window.location.hash === "#my-signals") {
+        showMySignalContainer();
+    }
+
+    // Listen for changes in the URL hash (e.g., when the user clicks a link)
+    window.addEventListener("hashchange", () => {
+        if (window.location.hash === "#browse-signals") {
+            showBrowseSignalContainer();
+        } else if (window.location.hash === "#my-signals") {
+            showMySignalContainer();
+        }
+    });
+</script>
+
+
+{% endblock %}
+
+{% block signals-sidebar %}
+active
+{% endblock %}
+
+{% for conversation in conversations %}
+    {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+        {% block unread_messages %}unread_message-notifier-tab{% endblock %}
+        {% block unread_messages-tab %}unread{% endblock %}
+    {% endif %}
+{% endfor %}

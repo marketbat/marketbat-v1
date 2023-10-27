@@ -1,0 +1,396 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<section class="assets__details-section">
+    <div class="assets__details-body">
+        <div class="assets__details-body-item assets__details-body-about" id="assets__details-body-about">
+            <div class="about__asset-top">
+                <div class="about_asset-top-header">
+                    <div class="community-profile">
+                        <div class="community-profile-left">
+                            <span class="community-profile-avatar"><img src="{% static 'images/bitcoin.png'%}" alt=""></span>
+                            <span class="community-profile-container">
+                                <span class="community-profile-name">
+                                    <span class="community-profile-name_symbol">{{asset.name}}</span>
+                                    <span class="community-profile-badge"><i class='bx bxs-badge-check'></i></span>
+                                    <span class="community-profile-symbol">@{{asset.symbol}}</span>
+                                </span>
+                                <span class="community-profile-subscribers">
+                                    {{asset.subscribers}} Subscribers
+                                </span>
+                            </span>
+                            
+                        </div>
+                        <div class="community-profile-right">
+                            <button>Susbcribe</button>
+                        </div>
+                    </div>
+                    <div class="about__asset-header">
+                        <div class="about__asset-header-left">
+                            <div class="about__asset-header__sentiment">
+                                <span class="{% if asset.current_sentiment == 'Bullish' %}positive{% elif asset.current_sentiment == 'Neutral' %}neutral{% else %}negative{% endif %}">{{asset.current_sentiment}} </span>
+                            </div>
+                        </div>
+                        <div class="about__asset-header-right">
+                            <div class="about__asset-price">
+                                <i class='bx bx-chat' ></i>
+                                {{asset.current_conversation_volume }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="community-post__feed">
+                        <div class="community-post__feed__container">
+                            <div class="community-post__feed-top">
+                                <div class="community-post__feed-top__header">
+                                    <span class="user-profile-avatar"><img src="{% static 'images/bitcoin.png'%}" alt=""></span>
+                                    <span class="post__placeholder-text"><textarea id="post__text" type="text" placeholder="What do you think about {{asset.name}} today ?"></textarea> </span>
+                                </div>
+                                <div class="community-post__feed__buttons">
+                                    <i class='bx bx-smile'></i>
+                                    <!-- <button id="post-bullish" class="post_sentiment post-bullish" onclick="setActiveSentiment('bullish')">Bullish <i class='bx bxs-up-arrow' ></i></button>
+                                    <button id="post-bearish" class="post_sentiment post-bearish" onclick="setActiveSentiment('bearish')">Bearish <i class='bx bxs-down-arrow' ></i></button> -->
+                                    <i class='bx bxs-image-add'></i>
+                                    <i class='bx bxs-file-gif' ></i>
+                                    <button id="post__btn" class="post__feed" >Post</button>
+                                </div>
+        
+                            </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="about__asset-body-description">
+                    <h2>{{asset.name}} Today</h2>
+                    <p>
+                        {% if asset.insights %}
+                    
+                            {{asset.insights}} 
+                    
+                        {% else %}
+                            SmartBat does not have enough information to give insights about {{asset.name}} at the moment, please check again later.
+                        {% endif %}
+                        
+                    </p>
+                
+                </div>
+            </div>
+            <div class="about__asset-body">
+                <div class="about__asset-body-top">
+                    <div class="community">
+                        <div class="community-title">
+                            <div class="community-collapse">
+                                <i class='bx bx-chevron-down' id="community-collapse-down"></i>
+                                <i class='bx bx-chevron-up' id="community-collapse-up"></i>
+                            </div>
+                            <h4>{{asset.name}} Posts 👨‍👩‍👧‍👦</h4>
+                        </div>
+                        <div class="community-body">
+                            <div class="community-posts-container">
+                                {% if posts %}
+                                    {% for post in posts %}
+                                    <div class="community-posts-item">
+                                        <div class="community-posts-item_header">
+                                            <div class="community-posts-item_header-left">
+                                                <span class="community-post-avatar"><img src="{% static 'images/logo-dark.png'%}" alt="">
+                                                </span>
+                                                <span class="community-post-name">
+                                                    <span class="community-post-name_symbol">{{post.profile.display_name}}</span>
+                                                    <span class="community-post-badge"><i class='bx bxs-badge-check'></i></span>
+                                                    <span class="community-post-symbol">@{{post.profile.user}}</span>
+                                                    <span class="community-post-symbol">·</span>
+                                                    <span class="community-post-time" data-post-timestamp="{{ post.post_date | date:'U' }}">{{ post.post_date }}</span>
+
+                                                </span>
+                                            </div>
+                                            <!-- <div class="community-posts-item_header-right">
+                                                <button class="community-post-sentiment {% if post.post_sentiment == 'Bullish' %}positive-bg{% else %}negative-bg{% endif %}">{{post.post_sentiment}}</button>
+                                            </div> -->
+                                        </div>
+                                        <div class="community-posts-item_body">
+                                            <p> 
+                                                <!-- <span class="community-posts-item_asset-tag">#{{post.asset}}</span> -->
+                                            {{post.post_text}}
+                                            </p>
+                                            <!-- <span>
+                                                <img src="{% static 'images/post_chart.jpeg'%}" alt="">
+                                            </span> -->
+                                        </div>
+                                        <div class="community-posts-item_footer">
+                                            <i class='bx bx-heart' ></i>
+                                            <i class='bx bx-comment-detail'></i>
+                                            <i class='bx bx-repost'></i>
+                                            <i class='bx bx-share' ></i>
+                                            <i class='bx bx-share-alt' ></i>
+                                            
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="community-no-posts">
+                                        <h1>No Posts Yet. </h1>
+                                    </div>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news">
+                        <div class="news-title">
+                            <div class="news-collapse">
+                                <i class='bx bx-chevron-down' id="news-collapse-down"></i>
+                                <i class='bx bx-chevron-up' id="news-collapse-up"></i>
+                            </div>
+                            <h4>{{asset.name}} Articles 📰 </h4>
+                        </div>
+                        <div class="news-body">
+                            <div class="news-body__container">
+                                {% if articles %}
+                                    {% for article in articles %}
+                                        <div class="news-body__container-item">
+                                            <div class="news-body__container-item-top">
+                                                <span class="news-body__container-item-bullet">
+                                                    &#x2022;
+                                                </span>
+                                                <span class="news-body__container-item-time" data-post-timestamp="{{ article.article_date | date:'U' }}">
+                                                    {{article.article_date}} 
+                                                </span>
+                                            </div>
+                                            <div class="news-body__container-item-bottom">
+                                                <div class="news-body__container-item-bottom-left">
+                                                    <span class="news-headline">
+                                                        <h3>
+                                                            <a href="{{article.article_link}} ">
+                                                                {{article.article_text}} 
+                                                            </a>
+                                                        </h3>
+                                                    </span>
+                                                    <span class="news-platform">
+                                                        <p>{{article.article_author}} </p>
+                                                    </span>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    {%endfor%}
+
+                                {% else %}
+                                    <div class="community-no-posts">
+                                        <h1>No Articles Yet. </h1>
+                                    </div>
+                                {% endif %}
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+
+                
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const toggleAnalyticsButton = document.querySelector(".analytics-title");
+    const analyticsContainer = document.querySelector(".analytics-body");
+
+    const toggleNewsButton = document.querySelector(".news-title");
+    const newsContainer = document.querySelector(".news-body");
+
+    const toggleCommunityButton = document.querySelector(".community-title");
+    const communityContainer = document.querySelector(".community-body");
+
+
+    toggleNewsButton.addEventListener("click", function () {
+      if (newsContainer.classList.contains("active")) {
+        $("#news-collapse-down").show();
+        $("#news-collapse-up").hide();
+        newsContainer.classList.remove("active");
+      } else {
+        $("#news-collapse-up").show();
+        $("#news-collapse-down").hide();
+        newsContainer.classList.add("active");
+      }
+    });
+
+    toggleCommunityButton.addEventListener("click", function () {
+      if (communityContainer.classList.contains("active")) {
+        $("#community-collapse-down").show();
+        $("#community-collapse-up").hide();
+        communityContainer.classList.remove("active");
+      } else {
+        $("#community-collapse-up").show();
+        $("#community-collapse-down").hide();
+        communityContainer.classList.add("active");
+      }
+    });
+
+
+
+</script>
+
+<script>
+    const postText = document.getElementById('post__text');
+    const postBtn = document.getElementById('post__btn');
+    const postBullish = document.getElementById('post-bullish');
+    const postBearish = document.getElementById('post-bearish');
+
+   
+    let selectedSentiment = null;
+
+    // JavaScript function to set the active sentiment
+    function setActiveSentiment(sentiment) {
+        selectedSentiment = sentiment;
+
+         // Remove 'active' class from all buttons
+         const buttons = document.querySelectorAll('.post_sentiment');
+         buttons.forEach((button) => {
+             button.classList.remove('active');
+         });
+
+        // Add 'active' class to the clicked button
+        const activeButton = document.querySelector(`.post-${sentiment}`);
+        activeButton.classList.add('active');
+        
+    }
+
+    // JavaScript function to send the selected sentiment to the Django backend
+    function sendSelectedSentimentToBackend() {
+        const postTextValue = postText.value;
+        
+        if (selectedSentiment) {
+            console.log(selectedSentiment);
+            console.log(postTextValue);
+            $.ajax({
+                  url: 'post',
+                  method: 'POST',
+                  data: { 
+                    text: postTextValue, 
+                    sentiment: selectedSentiment,
+                  },
+                  success: function (response) {
+                    window.location.reload()
+                      if (response.message === 'success') {
+                          // Redirect or perform other actions for a successful login
+                          console.log("Posted successfully");
+                         
+                          
+                      } else {
+                          console.log("Unexpected response:", response);
+                      }
+                  },
+                  error: function (xhr, status, error) {
+                      if (xhr.status === 400) {
+                          console.log("Post unsucessful");
+                      } else {
+                          console.log("Error:", status, error);
+                      }
+                  }
+                });
+
+            } else {
+                console.error('No sentiment selected.');
+            }
+        }
+
+    postBtn.addEventListener("click", function () {
+        console.log("clicked")
+        sendSelectedSentimentToBackend()
+    });
+
+
+
+
+
+
+</script>
+
+<script>
+    function updateRelativeTime() {
+        const timeElements = document.querySelectorAll('.community-post-time');
+        const now = Math.floor(Date.now() / 1000); // Current time in seconds
+
+        timeElements.forEach((timeElement) => {
+            const postTimestamp = parseInt(timeElement.getAttribute('data-post-timestamp'));
+            const timeDifference = now - postTimestamp;
+
+            if (timeDifference < 60) {
+            // Less than a minute
+            timeElement.textContent = timeDifference + 's';
+            } else if (timeDifference < 3600) {
+            // Less than an hour
+            timeElement.textContent = Math.floor(timeDifference / 60) + 'm';
+            } else if (timeDifference < 86400) {
+            // Less than a day
+            timeElement.textContent = Math.floor(timeDifference / 3600) + 'h';
+            } else {
+            // More than a day, show the full date
+            const date = new Date(postTimestamp * 1000);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+            });
+            timeElement.textContent = formattedDate;
+            }
+        });
+    }
+
+    // Call the function initially to format existing timestamps
+    updateRelativeTime();
+
+    // You can also set an interval to periodically update the timestamps
+    setInterval(updateRelativeTime, 60000); // Update every minute
+
+</script>
+
+<script>
+    function updateRelativeTime() {
+        const timeElements = document.querySelectorAll('.news-body__container-item-time');
+        const now = Math.floor(Date.now() / 1000); // Current time in seconds
+
+        timeElements.forEach((timeElement) => {
+            const postTimestamp = parseInt(timeElement.getAttribute('data-post-timestamp'));
+            const timeDifference = now - postTimestamp;
+
+            if (timeDifference < 60) {
+            // Less than a minute
+            timeElement.textContent = timeDifference + ' seconds ago';
+            } else if (timeDifference < 3600) {
+            // Less than an hour
+            timeElement.textContent = Math.floor(timeDifference / 60) + ' minutes ago';
+            } else if (timeDifference < 86400) {
+            // Less than a day
+            timeElement.textContent = Math.floor(timeDifference / 3600) + ' hours ago';
+            } else {
+            // More than a day, show the full date
+            const date = new Date(postTimestamp * 1000);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+            });
+            timeElement.textContent = formattedDate;
+            }
+        });
+    }
+
+    // Call the function initially to format existing timestamps
+    updateRelativeTime();
+
+    // You can also set an interval to periodically update the timestamps
+    setInterval(updateRelativeTime, 60000); // Update every minute
+
+</script>
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-pyramid-funnel.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/themes/dark_turquoise.min.js"></script>
+  <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+  <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+{% endblock %} 

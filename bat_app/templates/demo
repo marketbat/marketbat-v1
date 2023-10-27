@@ -1,0 +1,321 @@
+<div class="browse__header-filters">
+                <div class="browse__header-sentiment-filters">
+                    {% for choice in sentiment_choices %}
+                    <span class="sentiment-filters-item">
+                        <input type="button" id="{{choice}}" class="sentiment__filters-item-btn" value="{{choice}}" onclick="setDuration()">
+                    </span>
+                    {% endfor %}
+                </div>
+                <div class="browse__header-category-filters">
+                    {% for choice in category_choices %}
+                    <span class="category-filters-item">
+                        <input type="button" id="{{choice}}" class="category__filters-item-btn" value="{{choice}}" onclick="setDuration()">
+                    </span>
+                    {% endfor %}
+                </div>
+                <div class="browse__header-duration-filters">
+                    <span class="duration-filters-item">
+                        <input type="button" id="twentyfour-hours" class="duration__filters-item-btn" value="Last 24H" onclick="setDuration()">
+                    </span>
+                    <span class="duration-filters-item">
+                        <input type="button" id="seven-days" class="duration__filters-item-btn" value="Last 7D" onclick="setDuration()">
+                    </span>
+                    <span class="duration-filters-item">
+                        <input type="button" id="thirty-days" class="duration__filters-item-btn" value="Last 30D" onclick="setDuration()">
+                    </span>
+                    <span class="duration-filters-item">
+                        <input type="button" id="all-time" class="duration__filters-item-btn" value="All time" onclick="setDuration()">
+                    </span>
+                </div>
+            </div>
+
+
+
+            <div class="header__menu-collapse-items">
+                <div class="header__collapse-menu-item">
+                    <div class="header__collapse-menu-item-title">
+                      <span>Dashboard</span>
+                      <span class="header__submenu-icons"> 
+                        <i class='bx bx-chevron-down'></i>
+                        <i class='bx bx-chevron-up'></i>
+                      </span>  
+                    </div>
+                    <div class="header__submenu-collapse">
+                      <div class="header__submenu-links">
+                        <a href="/feeds" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Feeds</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Follow up with feeds from millions of investors from across the world. 
+                          </div>
+                        </a>
+                        <a href="/calendar" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Economic Calendar</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Follow up with feeds from millions of investors from across the world. 
+                          </div>
+                        </a>
+                        <a href="/news" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>News & Analysis</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Follow up with feeds from millions of investors from across the world. 
+                          </div>
+                        </a>
+                        <a href="/blog" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>SmartBat Blog</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Follow up with feeds from millions of investors from across the world. 
+                          </div>
+                        </a>
+                        <a href="/channels" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Private Channels</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Follow up with feeds from millions of investors from across the world. 
+                          </div>
+                        </a>
+                      
+                        
+                      </div>
+                      </div>
+                </div>
+                <div class="header__collapse-menu-item">
+                    <div class="header__collapse-menu-item-title">
+                      <span>Markets</span>
+                      <span class="header__submenu-icons">
+                        <i class='bx bx-chevron-down'></i>
+                        <i class='bx bx-chevron-up'></i>
+                      </span>
+                    </div>
+                    <div class="header__submenu-collapse">
+                      <div class="arrow">
+                      </div>
+                      <div class="header__submenu-links">
+                        <a href="/forex_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Forex</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/commodities_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Commodities</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/crypto_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Cryptocurrency</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/stocks_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Stocks</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/nft_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>NFTs</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/indices_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Indices</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/bonds_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Bonds</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/etfs_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>ETFs</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/reits_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>REITs</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        <a href="/other_assets" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Others</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Trade foreign exchanmge currienes of different countries. 
+                          </div>
+                        </a>
+                        
+                      </div>
+                      </div>
+                </div>
+                <div class="header__collapse-menu-item">
+                    <div class="header__collapse-menu-item-title">
+                      <span>Company</span>
+                      <span class="header__submenu-icons">
+                        <i class='bx bx-chevron-down'></i>
+                        <i class='bx bx-chevron-up'></i>
+                      </span>
+                    </div>
+                    <div class="header__submenu-collapse">
+                      <div class="arrow">
+                      </div>
+                      <div class="header__submenu-links">
+                        <a href="/about_us#about-us" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>About</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Discover out vision, mission and team
+                          </div>
+                        </a>
+                        <a href="/about_us#our-team" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Team</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Discover the global team behind MarketBat.
+                          </div>
+                        </a>
+                        <a href="/about_us#our-partners" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Partners</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Explore our world class portfolio of partners
+                          </div>
+                        </a> 
+                        <a href="/about_us#our-careers" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Careers</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Discover the markets with us.
+                          </div>
+                        </a>                     
+                        <a href="/about_us#our-updates" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Updates</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Company and Product Updates
+                          </div>
+                        </a>                                                     
+                        <a href="/about_us#contact-us" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Contact Us</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Got enquiries? Get in touch with us.
+                          </div>
+                        </a>
+                      </div>
+                      </div>
+                </div>
+                <div class="header__collapse-menu-item">
+                    <div class="header__collapse-menu-item-title">
+                          <span>What's Trending?</span>
+                        <span class="header__submenu-icons">
+                          <i class='bx bx-chevron-down'></i>
+                          <i class='bx bx-chevron-up'></i>
+                        </span>
+                    </div>
+                    <div class="header__submenu-collapse">
+                      <div class="arrow">
+                      </div>
+                      <div class="header__submenu-links">
+                        <a href="/learn#whats-trending" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>What's Trending</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Read out top stories & insights
+                          </div>
+                        </a>
+                        <a href="/learn#events" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Events</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Connect virtually and in person. 
+                          </div>
+                        </a>
+                        
+                        <a href="/learn#research" class="header__submenu-link">
+                          <div class="header__submenu-link-header">
+                            <h2>Research & Analysis</h2>
+                          </div>
+                          <div class="header__submenu-link-subtitle">
+                            Get our industry-leading insights. 
+                          </div>
+                        </a>
+                      </div>
+                      </div>
+                </div>
+                <div class="header__collapse-menu-item">
+                  <div class="header__collapse-menu-item-title">
+                      <span>SmartBat</span>
+                      <span class="header__submenu-icons">
+                        <i class='bx bx-chevron-down'></i>
+                        <i class='bx bx-chevron-up'></i>
+                      </span>
+                  </div>
+                  <div class="header__submenu-collapse">
+                    <div class="arrow">
+                    </div>
+                    <div class="header__submenu-links">
+                      <a href="/smartbat#what-is-smartbat" class="header__submenu-link">
+                        <div class="header__submenu-link-header">
+                          <h2>What is SmartBat AI</h2>
+                        </div>
+                        <div class="header__submenu-link-subtitle">
+                          Learn about the SmartBat AI. 
+                        </div>
+                      </a>
+                      <a href="/smartbat#subscribe" class="header__submenu-link">
+                        <div class="header__submenu-link-header">
+                          <h2>Subscribe to SmartBat AI</h2>
+                        </div>
+                        <div class="header__submenu-link-subtitle">
+                          Get AI powered sentiment insights.
+                        </div>
+                      </a>
+                      
+                    </div>
+                    </div>
+                </div>
+              </div>

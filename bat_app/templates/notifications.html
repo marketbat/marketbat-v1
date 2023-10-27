@@ -1,0 +1,46 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="notifications__container">
+    <div class="notifications__container-header">
+        <i class='bx bxs-notification' ></i>
+        <h1>Notifications</h1>
+    </div>
+    <div class="notifications__container-body">
+        <div class="notifications__items">
+            {% if notifications %}
+            {% for notification in notifications %}
+                <div class="notification__item {% if notification.read %} read{% endif %}">
+                    <div class="notification__time  time " data-post-timestamp="{{ notification.time | date:'U' }}">
+                       {{notification.time}}
+                    </div>
+                    <div class="notification__text">
+                        {{notification.text}}
+                    </div>
+                    <div class="notification__icon">
+                        <i class='bx bxs-bell-ring' ></i>
+                    </div>
+                </div>
+            {% endfor %}
+            {% else %}
+                <div class="no-notication">
+                    <p>No Notifcation to display for now. </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+ </div>
+
+{% endblock %}
+
+{% block notifications-sidebar %}
+active
+{% endblock %}
+
+{% for conversation in conversations %}
+    {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+        {% block unread_messages %}unread_message-notifier-tab{% endblock %}
+        {% block unread_messages-tab %}unread{% endblock %}
+    {% endif %}
+{% endfor %}

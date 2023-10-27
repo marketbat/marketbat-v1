@@ -1,0 +1,278 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="community-detail">
+    
+    <div class="community-detail__header">
+        <a href="/communities#my-communities">
+            <i class='bx bx-left-arrow-alt'></i>
+        </a>
+        <div class="community-detail__header-container">
+                {% if community.display_image.url %}
+                    <img src="{{ community.display_image.url }}" alt="">
+                {% else %}
+                    <img src="{% static 'images/user.png' %}" alt="">
+                {% endif %}
+            <h3>
+                {{ community.name }}
+            </h3>
+            <p>
+                <a href="{% url 'user_profile' community.admin %}">
+                    Admin: @{{ community.admin }}
+                </a>
+            </p>
+            <p>
+                {{ community.about }}
+            </p>
+            <p>
+                Created {{ community.date_started.date }} | {{ community.participants.count }} members.
+            </p>
+            {% if profile == community.admin %}
+                <button id="delete-community" onclick="deleteCommunity()">Delete Community</button>
+            {% elif profile in community.participants.all %}
+                <button id="leave-community" onclick="leaveCommunity()">Leave Community</button>
+            {% else %}
+                <button id="join-community" onclick="joinCommunity()">Join Community</button>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="community-detail__body">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="community-detail__body-item {% if message.sender == profile %} user_message {% endif %}" >
+            <div class="community-detail__body-item-container">
+                <div class="community-detail_sender-dp">
+                    <a href="{% url 'user_profile' message.sender.username %}">
+                        <img class="" src="{{ message.sender.profile_picture.url }}" alt="{% static 'images/user.png' %}">
+                    </a>
+                </div>
+
+                    
+                <div class="community-detail__body-item-text">
+                    <h6>
+                        <a href="{% url 'user_profile' message.sender.username %}">
+                            {{message.sender.display_name}}
+                        </a>
+                    </h6>
+                    {% if message.content_type == 'Text' %}
+                    <p>{{ message.text }}</p>
+                    {% elif message.content_type == 'Image' %}
+                        <img src="{{message.media_file.url}}" alt="Failed to load image">
+                        <p><i class='bx bxs-image'></i> {{ message.text }}</p>
+                    {% elif message.content_type == 'Video' %}
+                    <video src="{{message.media_file.url}}" alt="Failed to load video"></video>
+                        <p><i class='bx bxs-video' ></i> {{ message.text }}</p>  
+                    {% endif %}
+                    </div>
+            </div>
+            
+                <p class="community-detail__body-item-time">
+                    {{ message.timestamp }}
+                </p>
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <p class="no-message">No message yet, be te first to say something to the community.</p>
+        {% endif %}
+    </div>
+
+    
+    <div class="community-detail__type">
+        {% if profile in community.participants.all %}
+            <div  id="" class="message__image-preview">
+                <img src="" id="image-preview" alt="">
+            </div>
+            <div id="emoji-picker" class="emoji-picker" style="display: none;"></div>
+            <i class='bx bx-smile'></i>
+            <div class="" data-field="message-image">
+                <label for="message-image" class="edit-label"><i class='bx bxs-image-add'></i></label>
+                <input type="file" id="message-image" accept="image/*" name="message-image" style="font-size: 0; display: none;">
+            </div>
+            <input id="message_text" type="text" placeholder="Start a new message">
+            <button id="send_message"><i class='bx bx-send' ></i></button>
+        {% else %}
+            <p>You cannot send messages to this community, you have to be a member of the community. </p>
+        {% endif %}
+    </div>
+    
+    
+</div>
+
+
+<script>
+    const textMessage = document.getElementById('message_text');
+    const imageMessage = document.getElementById('message-image');
+    const sendMessageBtn = document.getElementById('send_message');
+
+
+    sendMessageBtn.addEventListener("click", function () {
+        const textMessageValue = textMessage.value;
+        const formData = new FormData();
+        formData.append('text', textMessageValue);
+        formData.append('image', imageMessage.files[0]);
+        $.ajax({
+                url: 'send_community_message',
+                method: 'POST',
+                data: formData, // Use the FormData object
+                processData: false, // Don't process the data
+                contentType: false, // Don't set content type (automatically set for FormData)
+                success: function (response) {
+                    window.location.reload()
+                    if (response.message === 'success') {
+                        // Redirect or perform other actions for a successful login
+                        console.log("Posted successfully");
+                        window.location.reload()
+                    } else {
+                        console.log("Unexpected response:", response);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400) {
+                        console.log("Post unsuccessful");
+                    } else {
+                        console.log("Error:", status, error);
+                    }
+                }
+            });
+        });
+</script>
+<script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the last message element
+        const lastMessage = document.querySelector('.community-detail__body-item:last-child');
+
+        // Check if the lastMessage exists
+        if (lastMessage) {
+            // Scroll to the last message
+            lastMessage.scrollIntoView();
+        }
+    });
+</script>
+
+<script>
+    // Function to handle file input change and update image preview
+    function handleFileInputChange(inputElement, previewElement) {
+        const fileInput = inputElement;
+        const previewImage = previewElement;
+  
+        fileInput.addEventListener("change", function () {
+            const file = fileInput.files[0];
+            const imagePreview = document.querySelector('.message__image-preview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.style.display = "block";
+                    previewImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+  
+  
+    // Initialize image preview for profile photo
+    const imageInput = document.getElementById("message-image");
+    const imagePreview = document.getElementById("image-preview");
+    handleFileInputChange(imageInput, imagePreview);
+  </script>
+      
+
+<script>
+    function joinCommunity() {
+    $.ajax({
+        url: 'join_community',
+        method: 'POST',
+        data: '',
+        success: function (response) {
+            window.location.reload();
+        },
+        error: function (xhr, status, error) {
+            // Handle errors if needed
+        }
+    });
+}
+
+function leaveCommunity() {
+    $.ajax({
+        url: 'leave_community',
+        method: 'POST',
+        data: '',
+        success: function (response) {
+            window.location.reload();
+        },
+        error: function (xhr, status, error) {
+            // Handle errors if needed
+        }
+    });
+}
+
+function deleteCommunity() {
+    $.ajax({
+        url: 'delete_community',
+        method: 'POST',
+        data: '',
+        success: function (response) {
+            window.location.href('/communities#my-communities');
+        },
+        error: function (xhr, status, error) {
+            // Handle errors if needed
+        }
+    });
+}
+
+    
+</script>
+
+
+<script>
+    // Function to toggle the emoji picker visibility
+    function toggleEmojiPicker() {
+        const emojiPicker = document.getElementById('emoji-picker');
+        emojiPicker.style.display = emojiPicker.style.display === 'block' ? 'none' : 'block';
+    }
+  
+  // Function to insert the selected emoji into the post text field
+  function insertEmoji(emojiObject) {
+    console.log('Received emojiObject:', emojiObject);
+  
+    const postText = document.getElementById('message_text'); // Replace with your post text field ID
+    const emoji = emojiObject.unicode;
+    console.log('Selected emoji:', emoji);
+  
+    postText.value += emoji; // Append the selected emoji to the current text
+    toggleEmojiPicker(); // Hide the emoji picker
+  }
+  
+  
+    // Add a click event listener to the smile icon to show/hide the emoji picker
+    const smileIcon = document.querySelector('.bx-smile'); // Replace with the correct selector
+    smileIcon.addEventListener('click', toggleEmojiPicker);
+  
+    // Initialize the emoji picker
+    const emojiPicker = document.getElementById('emoji-picker');
+    emojiPicker.innerHTML = '<emoji-picker></emoji-picker>';
+    emojiPicker.addEventListener('emoji-click', (event) => {
+        insertEmoji(event.detail.emoji);
+    });
+  </script>
+
+
+{% endblock %}
+
+{% block communities-sidebar %}
+active
+{% endblock %}
+
+{% for community in communitys %}
+    {% with last_message=community.get_last_message %}
+        {% if not last_message.read and last_message.sender != profile %}
+            {% block unread_community %}unread_message-notifier-tab{% endblock %}
+            {% block unread_community-tab %}unread{% endblock %}
+        {% endif %}
+    {% endwith %}
+{% endfor %}

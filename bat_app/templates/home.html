@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<section class="feed-community__section">
+    <div class="sideheader__container">
+        <a href="/" class="sideheader__item {% block feeds-sidebar %}{% endblock %}">
+            <i class='bx bx-home-alt' ></i>
+            <p>Home</p>
+        </a>
+        <a href="/explore" class="sideheader__item {% block explore-sidebar %}{% endblock %}">
+            <i class='bx bx-search' ></i>
+            <p>Explore</p>
+        </a>
+        <a href="{% if user.is_authenticated %}{% url 'messages' %}{% else %}#login{% endif %}" class="sideheader__item {% block messages-sidebar %}{% endblock %}" >
+            <i class='bx bx-chat {% block unread_messages-tab %}{% endblock %}' style="position: relative;" >
+                <p class="{% block unread_messages %}{% endblock %}"></p>
+            </i>
+            <p>Messages</p>
+            
+        </a>
+        <a href="/polls" class="sideheader__item {% block polls-sidebar %}{% endblock %}">
+            <i class='bx bx-poll'></i>
+            <p>Polls</p>
+        </a>
+        <a href="{% if user.is_authenticated %}/signals#browse-signals{% else %}#login{% endif %}" class="sideheader__item {% block signals-sidebar %}{% endblock %}">
+            <i class='bx bx-candles'></i>
+            <p>Signals</p>
+        </a>
+        <!-- <a href="/news" class="sideheader__item {% block news-sidebar %}{% endblock %}">
+            <i class='bx bxs-videos' ></i>
+            <p>Learn</p>
+        </a> -->
+        <a href="{% if user.is_authenticated %}/communities#my-communities{% else %}#login{% endif %}" class="sideheader__item {% block communities-sidebar %}{% endblock %}">
+            <i class='bx bxs-user-detail'></i>
+            <p>Communities</p>
+        </a>
+       
+        <a href="{% if user.is_authenticated %}/notification{% else %}#login{% endif %}" class="sideheader__item {% block notifications-sidebar %}{% endblock %}">
+            <i class='bx bxs-bell' ></i>
+            <p>Notifcations</p>
+        </a>
+        <a href="{% if user.is_authenticated %}/pro {% else %}#login{% endif %}" class="sideheader__item">
+            <i class='bx bxl-product-hunt'></i>
+            <p>Market Pro</p>
+        </a>
+
+    </div> 
+    <div class="community-feed">
+        <div class="community-feed__container">
+            {% block community %}{% endblock %}
+        </div>
+        <div class="trending">
+            <div class="trending__container">
+                <div class="trending__news trending__item">
+                    <div class="trending__news-header">
+                        <div class="trending__icons">
+                            <i class='bx bx-chevron-down'></i>
+                            <i class='bx bx-chevron-up'></i>
+                        </div>
+                        <div class="top_polls-header">
+                            <h3> Top Polls 🔥 </h3>
+                            <a href="/polls">See more -></a>
+                        </div>
+                    </div>
+                    <div class="trending__news-body swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            {% for asset in top_polls %}
+                            <div class="polls__body-item swiper-slide" data-asset-id="{{ asset.id }}" >
+                                <span class="polls__title">
+                                    <p>{{ asset.name }}</p>
+                                    <p id="total-polls-{{ asset.id }}">{{ asset.total_polls }}</p>
+                                </span>
+                                <button data-authenticated="true" class="polls__body-item-bullish {% if profile in asset.profiles_voted_bullish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bullish">
+                                    <p>🐂 Bullish<i class='bx bxs-check-circle'></i></p>
+                                    <h3 id="percent-bullish-{{ asset.id }}">{{ asset.percent_bullish }}%</h3>
+                                </button>        
+                                <button data-authenticated="true" class="polls__body-item-bearish {% if profile in asset.profiles_voted_bearish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bearish">
+                                    <p>🐻 Bearish<i class='bx bxs-check-circle'></i></p>
+                                    <h3 id="percent-bearish-{{ asset.id }}">{{ asset.percent_bearish }}%</h3>
+                                </button>
+                            </div>
+                        {% endfor %}
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="trending__assets trending__item">
+                    <div class="trending__assets-header">
+                        <div class="trending__icons">
+                            <i class='bx bx-chevron-down'></i>
+                            <i class='bx bx-chevron-up'></i>
+                        </div>
+                        <h3>Trending Assets 🔥</h3>
+                    </div>
+                    <div class="trending__assets-body">
+                        {% for trend in trending %}
+                            <a data-authenticated="true" href="{% url 'asset_details' trend.id %}">
+                                <div class="trending__assets-item">
+                                    <p>Trending in {{trend.category}}</p>
+                                    <h4 class="trend__asset">{{trend.name}}</h4>
+                                    <p>{{trend.posts.count}} posts</p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+        </div>   
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const trendingItems = document.querySelectorAll('.trending__item');
+
+        trendingItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                trendingItems.forEach((otherItem) => {
+                    if (item !== otherItem) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                item.classList.toggle('active');
+            });
+        });
+
+    </script>
+    <script>
+        // Get all the buttons with class 'polls__body-item-bullish' and 'polls__body-item-bearish'
+    
+    const pollContainer = document.querySelectorAll('.polls__body-item');
+    
+    // Add click event listeners to the bullish buttons
+    pollContainer.forEach(container => {
+        const bullishButton = container.querySelector('.polls__body-item-bullish');
+        const bearishButton = container.querySelector('.polls__body-item-bearish');
+        bullishButton.addEventListener('click', () => {
+            if (!bullishButton.classList.contains('active')) {
+                // Add 'active' to the clicked bullish button
+                bullishButton.classList.add('active');
+                bearishButton.classList.remove('active');
+                // Update the poll on the server and switch to bullish
+                updatePoll('bullish', container.dataset.assetId);
+            }
+        });
+    
+        bearishButton.addEventListener('click', () => {
+            if (!bearishButton.classList.contains('active')) {
+                // Add 'active' to the clicked bullish button
+                bearishButton.classList.add('active');
+                bullishButton.classList.remove('active');
+                // Update the poll on the server and switch to bullish
+                updatePoll('bearish', container.dataset.assetId);
+            }
+        });
+    });
+    
+    
+    
+    // Function to update the poll on the server
+    function updatePoll(pollType, assetId) {
+        $.ajax({
+            url: `/update_poll/${assetId}/${pollType}`,
+            method: 'POST',
+            data: {},
+            success: function (response) {
+                if (response.message === 'success') {
+                    // Update the displayed poll percentages and total polls for the specific asset
+                    const totalPollsElement = document.getElementById(`total-polls-${assetId}`);
+                    const percentBullishElement = document.getElementById(`percent-bullish-${assetId}`);
+                    const percentBearishElement = document.getElementById(`percent-bearish-${assetId}`);
+    
+                    if (totalPollsElement && percentBullishElement && percentBearishElement) {
+                        totalPollsElement.textContent = response.total_polls;
+                        percentBullishElement.textContent = response.percent_bullish.toFixed(2) + '%';
+                        percentBearishElement.textContent = response.percent_bearish.toFixed(2) + '%';
+                    }
+                } else if (response.message === 'not_authenticated') {
+                    // Handle not authenticated
+                } else {
+                    console.log('Unexpected response:', response);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('Error:', status, error);
+            }
+        });
+    }
+    
+    
+    </script>
+
+</section>
+{% endblock %}
+
+{% block title %} 
+    MarketBat 
+{% endblock %}
+
+

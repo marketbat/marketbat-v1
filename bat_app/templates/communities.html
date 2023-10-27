@@ -1,0 +1,332 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="communities__container">
+   <div class="communities__header">
+      <div class="communities__header-title">
+          <h3>Explore Communities</h3>
+          <button id="create-community">Create community</button>
+      </div>
+  </div>
+  <div class="communities__header-container">
+      <div class="communities__header-item active">
+         <p><a href="#my-communities">My communities</a></p>
+      </div>
+      <div class="communities__header-item">
+          <p><a href="#browse-communities">Browse communities</a></p>
+      </div>
+     
+  </div>
+  <div class="communities__search search-item">
+      <input id="search-communities" type="search" placeholder="Search communities">
+  </div>
+   <div class="communities__container-body">
+      <div class="communities__items my_communities">
+         {% if my_communities %}
+            {% for community in my_communities %}
+            
+               <div class="communities__item">
+                  <a href="{% url 'view_community' community.id %}">
+                  <div class="communities__image">
+                     {% if community.cover_image %}
+                        <img src="{{ community.cover_image.url }}" alt="{{ community.display_image.url }}">
+                     {% else %}
+                        <img src="{{ community.display_image.url }}" alt="{{ community.display_image.url }}">
+                     {% endif %}
+                  </div>
+                  <div class="communities__description">
+                     <div class="communitie__name">
+                        <h3>{{ community.name }}</h3>
+                     </div>
+                     <div class="communitie__about">
+                        <p>
+                           {% if community.about|length > 200 %}
+                              {{ community.about|slice:":200" }}...
+                           {% else %}
+                              {{ community.about }}
+                           {% endif %}
+                        </p>
+                  </div>
+                  
+                  
+                     <div class="communitie__platform">
+                        
+                        <div class="communitie__participants">
+                           <i class='bx bxs-user-detail'></i>
+                           {{ community.participants.count }}
+                        </div>
+                        <div class="communitie__existence">
+                           {{ community.date_started.date }}
+                        </div>
+                     </div>
+                  </div>
+                  </a>
+               </div>
+       
+            {% endfor %}
+         {% else %}
+            <div class="no-community-results" style="display: flex;">No community found</div>
+         {% endif %}
+      </div>
+      <div class="communities__items browse_communities">
+         {% if other_communities %}
+            {% for community in other_communities %}
+            
+               <div class="communities__item">
+                  <a href="{% url 'view_community' community.id %}">
+                     <div class="communities__image">
+                        {% if community.cover_image %}
+                        <img src="{{ community.cover_image.url }}" alt="{{ community.display_image.url }}">
+                     {% else %}
+                        <img src="{{ community.display_image.url }}" alt="{{ community.display_image.url }}">
+                     {% endif %}
+                     </div>
+                     <div class="communities__description">
+                        <div class="communitie__name">
+                           <h3>{{ community.name }}</h3>
+                        </div>
+                        <div class="communitie__about">
+                           <p>
+                              {{ community.about }}
+                           </p>
+                        </div>
+                        <div class="communitie__platform">
+                              <div class="communitie__participants">
+                                 <i class='bx bxs-user-detail'></i>
+                                 {{ community.participants.count }}
+                              </div>
+                              <div class="communitie__existence">
+                                 {{ community.date_started.date }}
+                              </div>
+                        </div>
+                     </div>
+                  </a>
+               </div>
+           
+            {% endfor %}
+         {% else %}
+            <div class="no-community-results" style="display: flex;">No community found</div>
+         {% endif %}
+      </div>
+      <div class="no-community-results">No community found</div>
+   </div>
+</div>
+
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+       const createCommunityPostBtn = document.getElementById("submit-community");
+       const communityError = document.getElementById("communities-create-error");
+       const communityContainer = document.getElementById('communities-create')
+     
+   
+     // Function to check if all required fields are filled
+     function isFormComplete() {
+       // Gather all the required input fields
+       const requiredFields = document.querySelectorAll(".communities-create input[required], .communities-create textarea[required], .communities-create select[required]");
+
+      // Check each required field
+       for (const field of requiredFields) {
+       // Trim the field value and check if it's empty or "None"
+       if (field.value.trim() === "" || field.value.trim() === "None") {
+           return false; // Field is empty or "None," the form is not complete
+       }
+       }
+       
+       return true; // All required fields are filled, the form is complete
+     }
+ 
+     // Function to update the button state
+     function updateButtonState() {
+       if (isFormComplete()) {
+         createCommunityPostBtn.removeAttribute("disabled");
+         createCommunityPostBtn.classList.remove('disabled');
+       } else {
+         createCommunityPostBtn.setAttribute("disabled", "disabled");
+         createCommunityPostBtn.classList.add('disabled');
+       }
+     }
+ 
+     // Add an event listener to all form fields
+     const formFields = document.querySelectorAll(".communities-create input,.communities-create  textarea, .communities-create select");
+     for (const field of formFields) {
+       field.addEventListener("input", updateButtonState);
+     }
+ 
+     // Initial check for form completeness
+     updateButtonState();
+ 
+     createCommunityPostBtn.addEventListener("click", function () {
+       if (isFormComplete()) {
+           
+           const communityName = document.getElementById('community-create-name').value;
+           const communityAbout = document.getElementById('community-create-about').value;
+           const communityDP = document.getElementById('community-create-dp').files[0];
+           const communityCoverPhoto = document.getElementById('community-create-cover-photo').files[0];
+          
+           const formData = new FormData();
+           formData.append("communityName", communityName);
+           formData.append("communityAbout", communityAbout);
+           formData.append("communityDP", communityDP);
+           formData.append("communityCoverPhoto", communityCoverPhoto);
+
+
+           $.ajax({
+               url: "create_community",
+               method: "POST",
+               data: formData,
+               processData: false,
+               contentType: false,
+               success: function (response) {
+               window.location.reload()
+               if (response.message === "success") {
+                   // Redirect or perform other actions for a successful campaign creation
+                   console.log("successful");
+                   window.location.reload();
+               } else {
+                   console.log("Unexpected response:", response);
+                   var communityError = document.getElementById('community-create-error');
+                   communityError.style.display = 'flex';
+
+                   // Check if the response is valid JSON
+                   var response;
+                   try {
+                       response = JSON.parse(xhr.responseText);
+                       var errorMessage = response.message;
+                       communityError.innerHTML = 'Error: ' + errorMessage;
+                   } catch (e) {
+                       // If parsing the response as JSON fails, log the response for debugging
+                       console.log('Invalid JSON response from the server:', xhr.responseText);
+                       communityError.innerHTML = 'Error: There was an issue creating campaign, please check all values again.';
+                   }
+                   }
+                   },
+               error: function(xhr, status, error) {
+                   var communityError = document.getElementById('communitys-create-error');
+                   communityError.style.display = 'flex';
+
+                   // Check if the response is valid JSON
+                   var response;
+                   try {
+                   response = JSON.parse(xhr.responseText);
+                   var errorMessage = response.message;
+                   communityError.innerHTML = 'Error: ' + errorMessage;
+                   } catch (e) {
+                   // If parsing the response as JSON fails, log the response for debugging
+                   console.log('Invalid JSON response from the server:', xhr.responseText);
+                   communityError.innerHTML = 'Error: There was an issue creating campaign, please check all values again.';
+                   }
+               },
+
+
+
+      });
+           
+
+
+       } else {
+         communityError.style.display = 'flex';
+         communityError.innerHTML = 'Please fill in all required fields.';
+       }
+     });
+   });
+</script>
+
+<script>
+   const createBtn = document.getElementById('create-community')
+   const createCommunityContainer = document.querySelector('.communities-create')
+   const closeCreateCommunityButton = document.getElementById("close-create-communities");
+   closeCreateCommunityButton.addEventListener("click", function() {
+       createCommunityContainer.style.display = "none";
+       });
+
+   createBtn.addEventListener("click", function() {
+       createCommunityContainer.style.display = 'flex'
+   });
+</script>
+
+<script>
+   // Get the authentication container and its child elements
+
+   const browseCommunitiesContainer = document.querySelector(".browse_communities");
+   const myCommunitiesContainer = document.querySelector(".my_communities");
+   const browseCommunitiesHeader = document.querySelector(".communities__header-item:last-child");
+   const myCommunitiesHeader = document.querySelector(".communities__header-item:first-child");
+
+
+   // Function to show the login container
+   function showBrowseCommunitiesContainer() {
+       browseCommunitiesContainer.style.display = "grid";
+       myCommunitiesContainer.style.display = "none";
+       browseCommunitiesHeader.classList.add("active");
+       myCommunitiesHeader.classList.remove("active");
+   }
+
+   // Function to show the signup container
+   function showMyCommunitiesContainer() {
+       browseCommunitiesContainer.style.display = "none";
+       myCommunitiesContainer.style.display = "grid";
+       browseCommunitiesHeader.classList.remove("active");
+       myCommunitiesHeader.classList.add("active");
+   }
+
+
+   // Initial page load based on the URL hash
+   if (window.location.hash === "#browse-communities") {
+       showBrowseCommunitiesContainer();
+   } else if (window.location.hash === "#my-communities") {
+       showMyCommunitiesContainer();
+   }
+
+   // Listen for changes in the URL hash (e.g., when the user clicks a link)
+   window.addEventListener("hashchange", () => {
+       if (window.location.hash === "#browse-communities") {
+           showBrowseCommunitiesContainer();
+       } else if (window.location.hash === "#my-communities") {
+           showMyCommunitiesContainer();
+       }
+   });
+</script>
+
+
+<script>
+   function filterCommunitys() {
+       var input = document.getElementById('search-communities');
+       var filter = input.value.toUpperCase();
+       var communityItems = document.querySelectorAll('.communities__item');
+       var noCommunityContainer = document.querySelector('.no-community-results');
+
+       communityItems.forEach(function(item) {
+           var symbol = item.querySelector('.communitie__name').textContent.toUpperCase();
+
+           if (symbol.indexOf(filter) > -1) {
+               item.style.display = 'block';
+               noCommunityContainer.style.display = 'none';
+           } else {
+               item.style.display = 'none';
+               noCommunityContainer.style.display = 'flex';
+           }
+       });
+   }
+
+   var searchInput = document.getElementById('search-communities');
+   searchInput.addEventListener('input', filterCommunitys);
+</script>
+
+
+
+
+
+{% endblock %}
+
+{% block communities-sidebar %}
+active
+{% endblock %}
+
+{% for conversation in conversations %}
+    {% if not conversation.get_last_message.read and conversation.get_last_message.sender != profile %}
+        {% block unread_messages %}unread_message-notifier-tab{% endblock %}
+        {% block unread_messages-tab %}unread{% endblock %}
+    {% endif %}
+{% endfor %}

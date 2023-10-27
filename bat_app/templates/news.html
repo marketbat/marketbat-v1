@@ -1,0 +1,69 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block community %}
+<div class="news__container">
+    <div class="news__container-header">
+        <h1>News & Articles</h1>
+    </div>
+    <div class="news__container-body">
+        <div class="news__items">
+            <div class="news__item">
+                <div class="news__item-left">
+                    <div class="news__item-title">Exploring Forex Markets</div>
+                    <div class="news__item-subtitle">Unraveling the Complex World of Foreign Exchange Trading...</div>
+                    <div class="news__item-author">John Doe</div>
+                </div>
+                <div class="news__item-right">
+                    <div class="news__image">
+                        <img src="{% static 'images/news-image-1.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="news__item">
+                <div class="news__item-left">
+                    <div class="news__item-title">The Rise of Cryptocurrencies</div>
+                    <div class="news__item-subtitle">Navigating the Uncharted Waters of Digital Currency...</div>
+                    <div class="news__item-author">Jane Smith</div>
+                </div>
+                <div class="news__item-right">
+                    <div class="news__image">
+                        <img src="{% static 'images/news-image-2.jpeg' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="news__item">
+                <div class="news__item-left">
+                    <div class="news__item-title">Mastering Stock Investments</div>
+                    <div class="news__item-subtitle">Unveiling the Secrets to Building a Profitable Stock Portfolio...</div>
+                    <div class="news__item-author">Alex Johnson</div>
+                </div>
+                <div class="news__item-right">
+                    <div class="news__image">
+                        <img src="{% static 'images/news-image-3.jpeg' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="news__item">
+                <div class="news__item-left">
+                    <div class="news__item-title">Strategies for Financial Success</div>
+                    <div class="news__item-subtitle">Unlocking the Door to Prosperity Through Wise Investments...</div>
+                    <div class="news__item-author">Emily Williams</div>
+                </div>
+                <div class="news__item-right">
+                    <div class="news__image">
+                        <img src="{% static 'images/news-image-4.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>    
+</div>
+
+{% endblock %}
+
+{% block news-sidebar %}
+active
+{% endblock %}
