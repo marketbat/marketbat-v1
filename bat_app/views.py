@@ -480,8 +480,8 @@ def community(request):
 
 @csrf_exempt
 def home(request):
-    create_assets_from_csv()
-    create_assets_from_csv_stocks()
+    #create_assets_from_csv()
+    #create_assets_from_csv_stocks()
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
     else:
