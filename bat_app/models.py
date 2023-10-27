@@ -462,6 +462,18 @@ class Explore(models.Model):
     image = models.FileField(upload_to='explore_images')
     news = models.TextField(blank=True)
 
+class Data(models.Model):
+    forex = models.FileField(upload_to='forex_data', blank=True)
+    stocks = models.FileField(upload_to='stocks_data', blank=True)
+    crypto = models.FileField(upload_to='crypto_data', blank=True)
+    nft = models.FileField(upload_to='nft_data', blank=True)
+    commodities = models.FileField(upload_to='commodities_data', blank=True)
+    indices = models.FileField(upload_to='indices_data', blank=True)
+    bonds = models.FileField(upload_to='bonds_data', blank=True)
+    etfs = models.FileField(upload_to='etfs_data', blank=True)
+    reits = models.FileField(upload_to='reits_data', blank=True)
+    others = models.FileField(upload_to='others_data', blank=True)
+
 
 class DailyPollStatistics(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

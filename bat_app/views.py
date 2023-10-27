@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Assets, Profile, Posts, Articles, Message, Conversation, Signal, Community, CommunityMessage, Notifications, Comments, Explore
+from .models import Assets, Profile, Posts, Articles, Message, Conversation, Signal, Community, CommunityMessage, Notifications, Comments, Explore, Data
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -12,55 +12,87 @@ from django.db.models import Max
 from django.db import IntegrityError
 from django.db.models import Count
 import csv
+import io
 
 def create_assets_from_csv():
     try:
-        csv_file = 'home/marketbat/marketbat-v1/bat_app/data/forex.csv'
-        
-        with open(csv_file, 'r', encoding='utf-8-sig') as file:
-            csv_reader = csv.DictReader(file)
-            for row in csv_reader:
-                try:
-                    # Remove the BOM from the column name
-                    code = row.get('\ufeff"CODE"', row.get('CODE'))
-                    
-                    base_currency = row["BASE_CURRENCY"]
-                    quote_currency = row["QUOTE_CURRENCY"]
-                    name = f"{base_currency}_{quote_currency}"
+        data = Data.objects.first()
+        if data:
+            base_url = "http://127.0.0.1:8000/"  # Replace with your actual base URL
+            csv_relative_url = data.forex.url
 
-                    # Check if the asset with the same name already exists
-                    if not Assets.objects.filter(name=name).exists():
-                        Assets.objects.create(name=name, symbol=code, category="Forex")
-                        print("Added", name)
-                except Exception as e:
-                    print("Error processing row:", e)
+            # Concatenate the base URL and relative URL to get the absolute URL
+            csv_url = f"{base_url}{csv_relative_url}"
+
+            # Download the CSV file from the URL
+            response = requests.get(csv_url)
+            
+            if response.status_code == 200:
+                csv_data = response.content.decode('utf-8-sig')
+                
+                # Create a temporary in-memory file to read the CSV data
+                with io.StringIO(csv_data) as file:
+                    csv_reader = csv.DictReader(file)
+                    for row in csv_reader:
+                        try:
+                            # Remove the BOM from the column name
+                            code = row.get('\ufeff"CODE"', row.get('CODE'))
+                            base_currency = row["BASE_CURRENCY"]
+                            quote_currency = row["QUOTE_CURRENCY"]
+                            name = f"{base_currency}_{quote_currency}"
+                            
+
+                            # Check if the asset with the same name already exists
+                            if not Assets.objects.filter(name=name).exists():
+                                Assets.objects.create(name=name, symbol=code, category="Forex")
+                                print("Added", name)
+                        except Exception as e:
+                            print("Error processing row:", e)
+            else:
+                print("Failed to download CSV file. Status Code:", response.status_code)
+        else:
+            print("No data found in the database.")
     except Exception as ex:
-        print("Error opening CSV file:", ex)
+        print("Error:", ex)
 
 def create_assets_from_csv_stocks():
     try:
-        csv_file = 'home/marketbat/marketbat-v1/bat_app/data/stocks.csv'
-        
-        with open(csv_file, 'r', encoding='utf-8-sig') as file:
-            csv_reader = csv.DictReader(file)
-            
-            for row in csv_reader:
-                try:
-                    # Remove the BOM from the column name
-            
-                    symbol = row["Symbol"]
-                    name= row["Name"]
-                    price = row['Last Sale']
-                    
+        data = Data.objects.first()
+        if data:
+            base_url = "http://127.0.0.1:8000/"  # Replace with your actual base URL
+            csv_relative_url = data.stocks.url
 
-                    # Check if the asset with the same name already exists
-                    if not Assets.objects.filter(name=name).exists():
-                        Assets.objects.create(name=name, symbol=symbol, category="Stocks", market_price=price)
-                        print("Added", name)
-                except Exception as e:
-                    print("Error processing row:", e)
+            # Concatenate the base URL and relative URL to get the absolute URL
+            csv_url = f"{base_url}{csv_relative_url}"
+
+            # Download the CSV file from the URL
+            response = requests.get(csv_url)
+            
+            if response.status_code == 200:
+                csv_data = response.content.decode('utf-8-sig')
+                
+                # Create a temporary in-memory file to read the CSV data
+                with io.StringIO(csv_data) as file:
+                    csv_reader = csv.DictReader(file)
+                    for row in csv_reader:
+                        try:
+                            symbol = row.get('Symbol')
+                            name = row.get('Name')
+                            price = row.get('Last Sale')
+                            
+
+                            # Check if the asset with the same name already exists
+                            if not Assets.objects.filter(name=name).exists():
+                                Assets.objects.create(name=name, symbol=symbol, category="Stocks", market_price=price)
+                                print("Added", name)
+                        except Exception as e:
+                            print("Error processing row:", e)
+            else:
+                print("Failed to download CSV file. Status Code:", response.status_code)
+        else:
+            print("No data found in the database.")
     except Exception as ex:
-        print("Error opening CSV file:", ex)
+        print("Error:", ex)
 
 def error_404(request, exception):
     return render(request, '404.html', status=404)
