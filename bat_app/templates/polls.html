@@ -22,22 +22,30 @@
    
     <div class="polls__body">
         <h3>Top Polls</h3>
-        {% for asset in top_polls %}
-        <div class="polls__body-item" data-asset-id="{{ asset.id }}" >
-            <span class="polls__title">
-                <p>{{ asset.name }}</p>
-                <p id="total-polls-{{ asset.id }}">{{ asset.total_polls }}</p>
-            </span>
-            <button data-authenticated="true" class="polls__body-item-bullish {% if profile in asset.profiles_voted_bullish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bullish">
-                <p>🐂 Bullish<i class='bx bxs-check-circle'></i></p>
-                <h3 id="percent-bullish-{{ asset.id }}">{{ asset.percent_bullish }}%</h3>
-            </button>        
-            <button data-authenticated="true" class="polls__body-item-bearish {% if profile in asset.profiles_voted_bearish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bearish">
-                <p>🐻 Bearish<i class='bx bxs-check-circle'></i></p>
-                <h3 id="percent-bearish-{{ asset.id }}">{{ asset.percent_bearish }}%</h3>
-            </button>
+        {% if top_polls %}
+            {% for asset in top_polls %}
+            <div class="polls__body-item" data-asset-id="{{ asset.id }}" >
+                <span class="polls__title">
+                    <p>{{ asset.name }}</p>
+                    <p id="total-polls-{{ asset.id }}">{{ asset.total_polls }}</p>
+                </span>
+                <button data-authenticated="true" class="polls__body-item-bullish {% if profile in asset.profiles_voted_bullish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bullish">
+                    <p>🐂 Bullish<i class='bx bxs-check-circle'></i></p>
+                    <h3 id="percent-bullish-{{ asset.id }}">{{ asset.percent_bullish }}%</h3>
+                </button>        
+                <button data-authenticated="true" class="polls__body-item-bearish {% if profile in asset.profiles_voted_bearish.all %}active{% endif %}" data-asset-id="{{ asset.id }}" data-poll-type="bearish">
+                    <p>🐻 Bearish<i class='bx bxs-check-circle'></i></p>
+                    <h3 id="percent-bearish-{{ asset.id }}">{{ asset.percent_bearish }}%</h3>
+                </button>
+            </div>
+        {% endfor %}
+        {% else %}
+        {% else %}
+        <div class="no-polls-results">
+            <p> No Poll to diplay. </p>
         </div>
-    {% endfor %}
+        {% endif %}
+        {% endif %}
     
 
 

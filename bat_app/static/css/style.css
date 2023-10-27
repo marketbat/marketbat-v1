@@ -1144,7 +1144,7 @@ progress {
 }
 .trending__news-body {
     padding: 1rem 0rem;
-    height: 25vh;
+    max-height: 25vh;
 }
 .trending__icons i {
     font-size: 30px;
@@ -2062,6 +2062,16 @@ progress {
     text-align: center;
     font-size: xx-large;
     color: var(--subtitle-color);
+    display: flex;
+    justify-content: center;
+}
+
+.no-trending {
+    text-align: center;
+    font-size: xx-large;
+    color: var(--subtitle-color);
+    display: flex;
+    justify-content: center;
 }
 
 /*-----------------------------------*\

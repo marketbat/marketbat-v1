@@ -65,6 +65,7 @@
                         </div>
                     </div>
                     <div class="trending__news-body swiper mySwiper">
+                        {% if top_polls %}
                         <div class="swiper-wrapper">
                             {% for asset in top_polls %}
                             <div class="polls__body-item swiper-slide" data-asset-id="{{ asset.id }}" >
@@ -81,9 +82,13 @@
                                     <h3 id="percent-bearish-{{ asset.id }}">{{ asset.percent_bearish }}%</h3>
                                 </button>
                             </div>
-                        {% endfor %}
-                           
+                            {% endfor %}
                         </div>
+                        {% else %}
+                        <div class="no-polls-results">
+                            <p> No Poll to diplay. </p>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="trending__assets trending__item">
@@ -95,6 +100,7 @@
                         <h3>Trending Assets 🔥</h3>
                     </div>
                     <div class="trending__assets-body">
+                        {% if trending %}
                         {% for trend in trending %}
                             <a data-authenticated="true" href="{% url 'asset_details' trend.id %}">
                                 <div class="trending__assets-item">
@@ -104,6 +110,13 @@
                                 </div>
                             </a>
                         {% endfor %}
+                        {% else %}
+                        <div class="no-trending">
+                            <p>No Trending Asset to display</p>
+                        </div>
+
+
+                        {% endif %}
                     </div>
                 </div>
                 
