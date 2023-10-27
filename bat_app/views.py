@@ -15,7 +15,7 @@ import csv
 
 def create_assets_from_csv():
     try:
-        csv_file = 'bat_app/data/forex.csv'
+        csv_file = 'home/marketbat/marketbat-v1/bat_app/data/forex.csv'
         
         with open(csv_file, 'r', encoding='utf-8-sig') as file:
             csv_reader = csv.DictReader(file)
@@ -39,7 +39,7 @@ def create_assets_from_csv():
 
 def create_assets_from_csv_stocks():
     try:
-        csv_file = 'bat_app/data/stocks.csv'
+        csv_file = 'home/marketbat/marketbat-v1/bat_app/data/stocks.csv'
         
         with open(csv_file, 'r', encoding='utf-8-sig') as file:
             csv_reader = csv.DictReader(file)
