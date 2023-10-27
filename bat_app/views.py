@@ -11,8 +11,6 @@ import requests
 from django.db.models import Max
 from django.db import IntegrityError
 from django.db.models import Count
-from spacy.lang.en.stop_words import STOP_WORDS
-
 
 
 def error_404(request, exception):
@@ -1092,7 +1090,7 @@ def extract_assets_from_post(post_text):
 
 
     # Define custom stop words for common English words and conjunctions
-    custom_stop_words = set(STOP_WORDS)
+    custom_stop_words = set()
     custom_stop_words.update(["is", "at", "and", "or", "the", "of", "in", "to", "for"])
 
     for asset in assets:
