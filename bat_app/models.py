@@ -57,7 +57,7 @@ class Assets(models.Model):
     name = models.CharField(max_length=100)
     symbol = models.CharField(max_length=100)
     market_price =  models.CharField(max_length=100, default="-")
-    avatar = models.CharField(max_length=100)
+    avatar = models.CharField(max_length=100, blank=True)
     trending = models.BooleanField(default=False)
     posts = models.ManyToManyField('Posts', related_name='asset_post', blank=True)
     category = models.CharField(max_length=100, choices=ASSET_CATEGORIES, default=OTHERS)
