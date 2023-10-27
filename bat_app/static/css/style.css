@@ -2064,6 +2064,7 @@ progress {
     color: var(--subtitle-color);
     display: flex;
     justify-content: center;
+    margin: 2rem;
 }
 
 .no-trending {
@@ -2072,6 +2073,7 @@ progress {
     color: var(--subtitle-color);
     display: flex;
     justify-content: center;
+    margin: 2rem;
 }
 
 /*-----------------------------------*\
