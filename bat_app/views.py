@@ -18,7 +18,7 @@ def create_assets_from_csv():
     try:
         data = Data.objects.first()
         if data:
-            base_url = "http://127.0.0.1:8000/"  # Replace with your actual base URL
+            base_url = "http://marketbat.pythonanywhere.com/"  # Replace with your actual base URL
             csv_relative_url = data.forex.url
 
             # Concatenate the base URL and relative URL to get the absolute URL
@@ -59,7 +59,7 @@ def create_assets_from_csv_stocks():
     try:
         data = Data.objects.first()
         if data:
-            base_url = "http://127.0.0.1:8000/"  # Replace with your actual base URL
+            base_url = "http://marketbat.pythonanywhere.com/"  # Replace with your actual base URL
             csv_relative_url = data.stocks.url
 
             # Concatenate the base URL and relative URL to get the absolute URL
