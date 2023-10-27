@@ -11,11 +11,9 @@ import requests
 from django.db.models import Max
 from django.db import IntegrityError
 from django.db.models import Count
-
-import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 
-nlp = spacy.load("en_core_web_sm")
+
 
 def error_404(request, exception):
     return render(request, '404.html', status=404)
