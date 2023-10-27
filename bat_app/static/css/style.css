@@ -2060,7 +2060,7 @@ progress {
 
 .no-polls-results {
     text-align: center;
-    font-size: xx-large;
+    font-size: small;
     color: var(--subtitle-color);
     display: flex;
     justify-content: center;
@@ -2068,7 +2068,7 @@ progress {
 
 .no-trending {
     text-align: center;
-    font-size: xx-large;
+    font-size: small;
     color: var(--subtitle-color);
     display: flex;
     justify-content: center;
