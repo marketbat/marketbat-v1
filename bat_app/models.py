@@ -56,12 +56,12 @@ class Assets(models.Model):
     )
     name = models.CharField(max_length=100)
     symbol = models.CharField(max_length=100)
+    subscribers = models.ManyToManyField('Profile', related_name='subscribers', blank=True)
     market_price =  models.CharField(max_length=100, default="-")
     avatar = models.CharField(max_length=100, blank=True)
     trending = models.BooleanField(default=False)
     posts = models.ManyToManyField('Posts', related_name='asset_post', blank=True)
     category = models.CharField(max_length=100, choices=ASSET_CATEGORIES, default=OTHERS)
-    subscribers = models.IntegerField(default=0)
     insights = models.TextField(blank=True)
     profiles_voted_bullish = models.ManyToManyField('Profile', related_name='bullish_assets', blank=True)
     profiles_voted_bearish = models.ManyToManyField('Profile', related_name='bearish_assets', blank=True)
@@ -79,7 +79,6 @@ class Assets(models.Model):
     alltime_conversation_intensity = models.DecimalField(default=0, decimal_places=2, max_digits=100)
     alltime_sentiment = models.CharField(max_length=100, choices=SENTIMENT_CHOICES, default=NEUTRAL)
   
-
 
     def __str__(self):
         return f"{self.name}"

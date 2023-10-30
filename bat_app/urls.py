@@ -50,6 +50,6 @@ urlpatterns = [
     path('like_post/<int:post_id>/', views.like_post, name='like_post'),
     path('comment/<int:post_id>/', views.comment, name='comment'),
     path('profile/<str:username>/', views.user_profile, name='user_profile'),
-    
     path('follow_profile/<int:profile_id>/', views.follow_profile, name='follow_profile'),
+    path('subscribe_asset/<int:asset_id>/', views.subscribe_asset, name='follow_asset'),
 ]

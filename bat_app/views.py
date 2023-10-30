@@ -215,11 +215,16 @@ def asset_details(request, id):
     assets = Assets.objects.all()
     posts = Posts.objects.filter(asset=asset).order_by('-id')
     articles = Articles.objects.filter(asset=asset).order_by('-id')
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     context = {
         'assets': assets,
         'asset': asset,
         'posts': posts,
         'articles': articles,
+        'profile': profile
         }
     return render(request, 'assets.html', context)
 
@@ -842,15 +847,40 @@ def follow_profile(request, profile_id):
                 notifications.save()
             except:
                 pass
-            message = f'Following'
+            message = f'Unfollow'
         else:
             user_profile.followers.remove(profile)
             profile.following.remove(user_profile)
             message = f'Follow'
             user_profile.save()
             profile.save()
-        print('done')
         return JsonResponse({'status': 'success', 'message': message, 'count': user_profile.followers.count()})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+@csrf_exempt
+def subscribe_asset(request, asset_id):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        asset = Assets.objects.get(id=asset_id)
+        subscribers = asset.subscribers.all()
+
+        if profile not in subscribers:
+            asset.subscribers.add(profile)
+            asset.save()
+            try:
+                text = f"You subscribed to {asset.name} 🥳."
+                notifications = Notifications.objects.create(profile=profile, text=text)
+                notifications.save()
+            except:
+                pass
+            message = f'Unsubscribe'
+        else:
+            asset.subscribers.remove(profile)
+            message = f'Subscribe'
+            asset.save()
+        return JsonResponse({'status': 'success', 'message': message, 'count': asset.subscribers.count()})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
@@ -929,12 +959,17 @@ def forex_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'forex.html', context)
@@ -945,12 +980,17 @@ def crypto_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'crypto.html', context)
@@ -961,12 +1001,17 @@ def stocks_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'stocks.html', context)
@@ -977,12 +1022,17 @@ def nft_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'nft.html', context)
@@ -993,12 +1043,17 @@ def commodities_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'commodities.html', context)
@@ -1009,12 +1064,17 @@ def indices_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'indices.html', context)
@@ -1025,12 +1085,17 @@ def bonds_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'bonds.html', context)
@@ -1042,12 +1107,17 @@ def etfs_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'etfs.html', context)
@@ -1058,12 +1128,17 @@ def reits_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'reits.html', context)
@@ -1074,12 +1149,17 @@ def other_assets(request):
     trending = Assets.objects.annotate(post_count=Count('posts')).order_by('-post_count')[:20]
     category_choices = [choice[0] for choice in Assets.ASSET_CATEGORIES] 
     sentiment_choices = [choice[0] for choice in Assets.SENTIMENT_CHOICES]
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+    else:
+        profile = None
     
     context = {
         'assets': assets,
         'trending': trending,
         'category_choices': category_choices,
         'sentiment_choices': sentiment_choices,
+        'profile': profile,
 
         }
     return render(request, 'others.html', context)
@@ -1153,18 +1233,7 @@ def logout(request):
     auth.logout(request)
     return redirect('home')
 
-@csrf_exempt
-def post(request, id):
-    if request.method == 'POST':
-        text = request.POST.get('text')
-        sentiment = request.POST.get('sentiment')
-        asset = get_object_or_404(Assets, pk=id)
-        profile = Profile.objects.get(user=request.user)
-        print(asset)
-        print(text)
-        print(sentiment.capitalize())
-        Posts.objects.create(profile=profile, asset = asset, post_text=text, post_sentiment=sentiment.capitalize())
-    return JsonResponse({'message': 'success'})
+
 
 def extract_assets_from_post(post_text):
     matched_assets = []
@@ -1192,6 +1261,33 @@ def extract_assets_from_post(post_text):
 
     return matched_assets
 
+
+@csrf_exempt
+def post(request, id):
+    if request.method == 'POST':
+        text = request.POST.get('text')
+
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+        else:
+            image = None  
+
+        if 'video' in request.FILES:
+            video = request.FILES['video']
+        else:
+            video = None  
+       
+        profile = Profile.objects.get(user=request.user)
+        post = Posts.objects.create(profile=profile, post_text=text, post_image=image, post_video=video)
+        results = extract_assets_from_post(text)
+        print(results)
+        for asset in results:
+            post.asset.add(asset)
+            asset.posts.add(post)
+            
+        post.save()
+        asset.save()
+    return JsonResponse({'message': 'success'})
 
 @csrf_exempt
 def postfeed(request):
