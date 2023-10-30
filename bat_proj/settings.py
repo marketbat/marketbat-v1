@@ -13,13 +13,12 @@ SECRET_KEY = 'django-insecure-k=&k8j+850a#b^^m_4&=qyu!h-&f!fev=k5(qoljf+*@zwbe5+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #For Developement
-DEBUG = True
+#DEBUG = True
 
 #For Production
-#DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -124,20 +123,20 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #For Development
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bat_app/static'),]
-STATIC_ROOT = os.path.join(BASE_DIR, 'bat_proj/staticfiles')
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bat_app/static'),]
+#STATIC_ROOT = os.path.join(BASE_DIR, 'bat_proj/staticfiles')
 
 #For Production
-#STATIC_ROOT = 'bat_app/static'
+STATIC_ROOT = 'bat_app/static'
 
 
 MEDIA_URL = '/media/'
 
 #For Development
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #For Production
-#MEDIA_ROOT = 'marketbat-v1/media'
+MEDIA_ROOT = 'marketbat-v1/media'
 
 
 # Default primary key field type
