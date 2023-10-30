@@ -990,11 +990,15 @@ progress {
     display: flex;
     flex-direction: column-reverse;
     justify-content: start;
+    height: 90vh;
+    overflow: auto;
    
 }
 
 .community-feed__container {
     width: 85vw;
+    height: 90vh;
+    overflow: auto;
    
 }
 
