@@ -487,6 +487,7 @@ def community(request):
 def home(request):
     #create_assets_from_csv()
     #create_assets_from_csv_stocks()
+    clear_last()
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
     else:
@@ -1318,10 +1319,9 @@ def postfeed(request):
 
 
 def clear_last():
-    first_50_assets = Articles.objects.all()[:1]
-    # now 730
-    first_50_asset_ids = first_50_assets.values_list('id', flat=True)
-    Articles.objects.exclude(id__in=first_50_asset_ids).delete()
+    last_50_assets = Assets.objects.all()[:5000]
+    last_50_assets_ids = last_50_assets.values_list('id', flat=True)
+    Assets.objects.exclude(id__in=last_50_assets_ids).delete()
 
 def update_data():
     assets = Assets.objects.all()

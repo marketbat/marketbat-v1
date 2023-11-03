@@ -435,7 +435,7 @@ i {
     height: 80vh;
     align-items: center;
     text-align: center;
-    color: var(--black);
+    color: var(--text-color);
 }
 
 .error-content h1 {
