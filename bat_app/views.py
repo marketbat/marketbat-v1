@@ -1319,7 +1319,7 @@ def postfeed(request):
 
 
 def clear_last():
-    last_50_assets = Assets.objects.all()[:5000]
+    last_50_assets = Assets.objects.all()[:500]
     last_50_assets_ids = last_50_assets.values_list('id', flat=True)
     Assets.objects.exclude(id__in=last_50_assets_ids).delete()
 
